@@ -1,0 +1,147 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, left=3.17cm, right=3.17cm, top=2.54cm, bottom=2.54cm]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{chemformula}
+\usepackage{cite}
+\usepackage[colorlinks, linkcolor=black, anchorcolor=black, citecolor=black]{hyperref}
+\usepackage{graphicx}
+\usepackage[utf8]{vietnam}
+
+
+
+\setlength{\parskip}{0.5em}
+\title{Sự Khác Nhau Giữa Switch Và Router}
+\author{\textup{9 - FOBE}}
+\begin{document}
+    \input{title/title.tex}
+
+    \begin{abstract}
+    Switch và Router là 2 thành phần quan trọng của một kết nối mạng. Mặc dù cả 2
+    đều kết nối các thiết bị thông qua một mạng, chúng có những chức năng hoàn toàn
+    khác nhau mà đôi khi người ta thường nhầm lẫn chúng là một. Bài này sẽ phân tích
+    sự khác nhau giữa 2 thiết bị. \\
+    
+    \end{abstract}
+    
+
+    \section*{Switch}
+    Switch là 1 thiết bị mạng cung cấp các chức năng chia sẻ thông tin và tài nguyên
+    bằng cách kết nối những thiết bị mạng như \textbf{máy tính, máy in và servers} trong một
+    kết nối mạng nhỏ. \
+    
+    Thông qua Switch, các thiết bị được kết nối có thể chia sẻ dữ liệu, thông tin và
+    giao tiếp với nhau. Nếu không có Switch chúng ta không thể xây dựng các hệ thống
+    mạng nhỏ cũng như không thể kết nối các thiết bị trong phạm vi tòa nhà hoặc khu vực. \
+
+    Hiện nay có 2 loại Switch chính được sử dụng là: Unmanaged và Managed Switch.
+    
+    
+    \subsection*{Cách hoạt động}
+    Như đã biết, mỗi kết nối mạng chứa một \textbf{MAC (Media Access Control) riêng biệt.}
+    Khi một thiết bị hay máy tính gửi một gói IP đến một thiết bị khác, sau đó switch đặt
+    gói IP trên với địa chỉ MAC nguồn và đích, đóng gói lại thành 1 Frame sau đó gửi
+    đến thiết bị khác. Khi Frame đến thiết bị đích, nó được giải nén và thiết bị nhận được gói IP.
+
+    \subsection*{Ưu điểm}
+    \begin{itemize}
+        \item Nâng cao băng thông của hệ thống mạng.
+        \item Có thể kết nối trực tiếp đến workstations hoặc thiết bị.
+        \item Cải thiện hiệu năng của kết nối mạng.
+        \item Giảm tải công việc trên máy chủ.
+    \end{itemize}
+    
+    
+    \section*{Router}
+    Router là một thiết bị mạng được sử dụng để kết nối nhiều switch và hệ thống
+    mạng tương ứng của chúng để xây dựng một hệ thống mạng lớn hơn. Các switch này
+    và mạng của chúng có thể ở cùng 1 vị trí hoặc ở những vị trí khác nhau. \
+
+    Router là một thiết bị thông minh chịu trách nhiệm định tuyến các gói thông tin
+    từ nguồn đến đích thông qua một mạng. \textbf{Nó còn phân phát hoặc định tuyến kết nối mạng
+    từ modem đến mọi thiết bị mạng có dây hoặc không dây như Pc, Laptop, Mobile Phone, tablet, ... }\
+
+    Router có 2 chức năng chính
+    \begin{itemize}
+        \item Tạo và duy trì \textbf{mạng LAN}
+        \item Quản lí dữ liệu vào ra.
+    \end{itemize}
+
+    Router kết nối nhiều mạng và cho phép các thiết bị được kết nối truy cập internet. Nó hoạt động
+    trên \textbf{network layer} và định tuyến các gói dữ liệu thông qua con đường
+    ngắn nhất trong mạng.\\
+
+    Hiện có 2 loại router chính được sử dụng là: \textbf{Wireles and Wired/Broadband Router}
+
+    \subsection*{Cách hoạt động}
+    Trong nhà hay văn phòng, chúng ta có nhiều thiết bị kết nối mạng và với router, các thiết
+    bị này có thể kết nối internet và hình thành một mạng. \
+
+    Router định tuyến/truyền các gói dữ liệu với địa chỉ IP đã biết từ mạng này 
+    đến mạng khác hoặc trong cùng một mạng. \
+
+    Nó tìm ra con đường truyền tốt và nhanh nhất và gửi dữ liệu từ đó đến các thiết
+    bị kết nối trong phạm vi mạng. \
+    
+    \subsection*{Ưu điểm}
+    \begin{itemize}
+        \item Kết nối được với nhiều cấu trúc mạng khác nhau.
+        \item Bảo mật tốt với mật khẩu.
+        \item Giảm ùn tắc mạng.
+        \item Cung cấp các gói thông tin chính xác với bộ định tuyến thông minh.
+    \end{itemize}
+
+    \section*{Sự khác nhau giữa Switch và Router}
+    \begin{flushleft}
+    Chức năng chính của switch là để kết nối những thiết bị cuối trong
+    khi router dùng để kết nối 2 mạng khác nhau. 
+
+    Switch nhắm tới việc xác định địa chỉ đến của gói IP nhận được và
+    chuyển tiếp nó đến địa chỉ đó. Trong khi đó nhiệm vụ chính của router là
+    tìm đường truyền ngắn và tốt nhất cho các gói dữ liệu dựa trên bảng định tuyến.
+
+    Có rất nhiều kĩ thuật switching như circuit switching, packet switching, 
+    and message switching. Để so sánh router chỉ sử dụng 2 kĩ thuật là adaptive routing
+    and non-adaptive routing.
+
+    Switch lưu trữ MAC address trong lookup table or bảng CAM để lấy địa chỉ
+    nguồn và đích. Trái ngược router lưu trữ các địa chỉ IP trong bảng định tuyến
+
+    Switch hoạt động dựa trên data link layer, router là network layer. 
+    \end{flushleft}
+    
+    \section*{Bảng so sánh}
+    \begin{center}
+        \begin{tabular}{ p{0.35\linewidth} | p{0.6\linewidth}}
+        \hline
+        Switch & Router  \\ \hline
+        Kết nối nhiều thiết bị mạng trong cùng một mạng. & Kết nối nhiều switch và hệ thống 
+        mạng tương ứng. \\ \hline
+        Hoạt động trên data link layer. & Hoạt động trên network layer. \\ \hline
+        Được sử dụng ở phạm vi LAN. & Có thể sử dụng ở cả LAN hay MAN. \\ \hline
+        Không thể thực hiện NAT & Có thể thực hiện NAT \\ \hline
+        Cần nhiều thời gian khi đưa ra lựa chọn định  uyến phức tạp. & Thực hiện nhanh hơn switch gấp nhiều lần. \\ \hline
+        Chỉ cung cấp port security. & Cung cấp những phương án để bảo vệ mạng khỏi những 
+        mối đe dọa. \\ \hline
+        Chỉ là một thiết bị semi-Intelligent. & Được biết đến là một thiết bị Intelligent. \\
+        \hline
+        Chế độ truyền dữ liệu bán song công hoặc song công toàn phần. & Chỉ song công toàn phần nhưng ta hoàn toàn có thể thay đổi một cách 
+        thủ công để hoạt đông bán song công. \\ \hline
+        Gửi thông tin từ thiết bị này sang thiết bị khác theo dạng Frame hoặc theo
+        các packet. & Gửi thông tin từ mạng này sang mạng khác theo dạng data packet. \\ \hline
+        Chỉ có thể hoạt động với mạng có dây & Cả mạng có dây và không dây \\ \hline
+        Khả dụng ở nhiều port & Mặc định chỉ có 2 port là Fast Ethernet Port nhưng ta có thể thêm các serial port. \\ \hline
+        Sử dụng bảng CAM cho địa chỉ MAC nguồn và đích. & Sử dụng bảng định tuyến để tìm ra tuyến tốt nhất cho IP.
+        \end{tabular}
+    \end{center}
+
+    \section*{Conclusion}
+    Chúng ta có thể kết luận rằng cả hai đều là những thiết bị quan trọng
+    để xây dựng một hệ thống mạng và chúng có những ưu điểm riêng trong mạng. Tuy nhiên để
+    xây dựng một home-based network và kết nối các thiết bị ta cần Switch, và để kết nối 2 mạng với nhau
+    ta dùng Router.
+    \bibliographystyle{ieeetrans}
+
+\end{document}
