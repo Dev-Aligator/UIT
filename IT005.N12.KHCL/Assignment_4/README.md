@@ -6,9 +6,9 @@
 - Hoặc gửi github username để t mời collab và tự push bài làm vào folder [src](src/)
 
 ## Phân công công việc
-1. Shenka
+1. Kim Yến
 2. Bé iu
-4. Kim Yến
+3. Shenka
 
 **Warning**: Nếu quá hạn deadline mà công việc chưa xong thì t sẽ hoàn thành nốt và nộp bài.
 
