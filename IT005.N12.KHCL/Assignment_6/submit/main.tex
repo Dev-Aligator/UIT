@@ -1,0 +1,204 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{amsmath,amsthm,amsfonts,amssymb,amscd}
+\usepackage{times}     
+\usepackage{bookmark}         
+\usepackage{graphicx}           
+\usepackage{float}              
+\usepackage{booktabs}           
+\usepackage{xcolor}             
+\usepackage{geometry}           
+\usepackage{fullpage}           
+\usepackage{comment}                     
+\usepackage{listings}           
+\usepackage{lastpage}           
+\usepackage{fancyhdr}           
+\usepackage{hyperref}           
+\usepackage[small,bf]{caption}  
+\usepackage{multicol}
+\usepackage{tikz}               
+\usepackage{circuitikz}         
+\usepackage{verbatim}          
+\usepackage{cite}               
+\usepackage[us]{datetime} 
+\usepackage{blindtext}
+\usepackage[utf8]{vietnam}
+\usepackage{array}
+\usepackage{makecell}
+\usepackage{tabularx}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{multirow}
+\input{defines.tex}
+\graphicspath{{Figs/}}
+
+\begin{document}
+
+\textcolor{UM_Brown}{
+\begin{minipage}{0.1\textwidth}
+    \begin{flushleft}
+        \includegraphics[height=3.5cm]{logo.eps}
+    \end{flushleft}
+\end{minipage}
+\begin{minipage}{0.8\textwidth}
+    \begin{center}
+        \textbf{\Large Nhập môn mạng máy tính}\\
+        \vspace{5pt}
+        Assignment 6 \\
+        \vspace{10pt}
+        \textit{Group 9 - FOBE} \\
+        \vspace{5pt}
+        \longdate\today
+    \end{center}
+\end{minipage}
+\vspace{10pt}
+\hrule
+}
+
+\section*{Problem 4:}
+\subsection*{A.}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \toprule
+     \bf{Địa chỉ đích}  & \textbf{Link interface} \\
+     \midrule
+     H3 & \#3 \\
+     \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection*{B.}
+Không thể có bảng forwarding đề yêu cầu. Vì đối với mạng datagram, quy tắc chuyển tiếp chỉ dựa trên địa chỉ đích.
+
+\subsection*{C.}
+\begin{table}[H]
+    \caption*{Router A}
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \toprule
+     \bf{Cổng vào}  & \textbf{Số hiệu của kết nối ảo vào} & \textbf{Cổng ra} & \textbf{Số hiệu của kết nối ảo ra} \\
+     \midrule
+     1 & 12 & 3 & 22 \\
+     \midrule
+     2 & 63 & 4 & 18 \\
+     \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsection*{D.}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \toprule
+     \bf{Router} & \bf{Cổng vào}  & \textbf{Số hiệu của kết nối ảo vào} & \textbf{Cổng ra} & \textbf{Số hiệu của kết nối ảo ra} \\
+     \midrule
+     B & 1 & 22 & 2 & 24 \\
+     \midrule
+     C & 1 & 18 & 2 & 50 \\
+     \midrule
+     \multirow{2}{*}{D} &  1 & 24 & 3 & 70 \\
+                        &  2 & 50 & 3 & 76 \\
+     \bottomrule
+    \end{tabular}
+\end{table}
+
+\newpage
+\section*{Problem 5}
+\subsection*{A.}
+Since the VC number is 2-bit, the maximum number of links that could be established is 22 = 4 links. Therefore, there is no VC number that could be assigned to the new VC.
+\subsection*{B.}
+The VC number is 2-bit and the number of links is 4. \\
+The number of combinations could be used: 24 = 16.
+
+\section*{Problem 10}
+\subsection*{A.}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \toprule
+     \bf{Prefix Match} & \bf{Link Interface}  \\
+     \midrule
+     11100000\;00  & 0 \\
+     \midrule
+     11100000\;01000000 & 1 \\
+     \midrule
+     11100000 & 2 \\
+     \midrule
+     11100001\;0 &  2 \\
+     \midrule
+     otherwise & 3 \\
+     \bottomrule
+    \end{tabular}
+\end{table}
+\subsection*{B.}
+\begin{itemize}
+    \item Prefix trùng ứng với địa chỉ thứ 1 là entry số  5: link interface 3.
+    \item Prefix trùng ứng với địa chỉ thứ 2 là entry số  2: link interface 1.
+    \item Prefix trùng ứng với địa chỉ thứ 3 là entry số  5: link interface 3.
+\end{itemize}
+
+\section*{Problem 11}
+Range of destination host addresses:
+\begin{equation*}
+    00 = 00-000000 \rightarrow 00-111111 
+\end{equation*}
+\begin{equation*}
+    010 = 010-00000 \rightarrow 01-011111
+\end{equation*}
+\begin{equation*}
+    011 = 011-00000 \rightarrow 011-11111
+\end{equation*}
+\begin{equation*}
+    10 = 10-000000 \rightarrow 10-111111
+\end{equation*}
+\begin{equation*}
+    11 = 11-000000 \rightarrow 11-111111
+\end{equation*}
+Number of addresses in the range:
+\begin{itemize}
+    \item Number of addresses for interface 0 = 2$^6$ = 64.
+    \item Number of addresses for interface 1 = 2$^5$ = 32.
+    \item Number of addresses for interface 2 = 2$^5$ +2$^6$ = 32 + 64 = 96.
+    \item Number of addresses for interface 3 = 2$^6$ = 64.
+\end{itemize}
+
+\section*{Problem 12}
+Range of destination host addresses:
+\begin{equation*}
+    1 = 10-000000 \rightarrow 10-111111 
+\end{equation*}
+\begin{equation*}
+    10 = 110-00000 \rightarrow 110-11111
+\end{equation*}
+\begin{equation*}
+    111 = 111-00000 \rightarrow 111-11111
+\end{equation*}
+\begin{equation*}
+    Otherwise = 0-0000000 \rightarrow 0-1111111
+\end{equation*}
+Number of addresses in the range:
+\begin{itemize}
+    \item Number of addresses for interface 0 = 2$^6$ = 64.
+    \item Number of addresses for interface 1 = 2$^5$ = 32.
+    \item Number of addresses for interface 2 = 2$^5$ = 32.
+    \item Number of addresses for interface 3 = 2$^7$ = 128.
+\end{itemize}
+
+\section*{Contributors}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{c|c}
+    \toprule
+     \bf{Problem }  & \textbf{Contributors} \\
+     \midrule
+     4 & Trâm Anh \\
+     5 & Kim Yến \\
+     10 & Hoàng Tân \\
+     11, 12 & Gia Khang \\
+     \bottomrule
+    \end{tabular}
+\end{table}
+
+
+
+\end{document} 
