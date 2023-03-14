@@ -1,0 +1,107 @@
+\documentclass[12pt]{amsart}
+
+\addtolength{\hoffset}{-2.25cm}
+\addtolength{\textwidth}{4.5cm}
+\addtolength{\voffset}{-2.5cm}
+\addtolength{\textheight}{5cm}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{15pt}
+\usepackage[utf8]{vietnam}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[colorlinks = true, linkcolor = black, citecolor = black, final]{hyperref}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{ marvosym }
+\usepackage{wasysym}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\ds}{\displaystyle}
+\DeclareMathOperator{\sech}{sech}
+
+
+\setlength{\parindent}{0in}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+{\scshape CS523.N21.KHCL} \hfill {\scshape \large Drawbacks of Treap} \hfill {\scshape 21521413}
+ 
+\smallskip
+
+\hrule
+
+\bigskip
+Treap là cây nhị phân lưu trữ hai thuộc tính là khóa và độ ưu tiên. Nó được sử dụng để triển khai priority queues và các cấu trúc dữ liệu khác đòi hỏi việc chèn và xóa các phần tử một cách hiệu quả theo thứ tự. Tuy nhiên, giống như bất kỳ cấu trúc dữ liệu nào khác, Treap cũng có những khuyết điểm. 
+\bigskip
+
+\bigskip
+
+Một số khuyết điểm của cây Treap có thể kể ra như:
+\begin{enumerate}
+
+\item  Memory overhead.
+
+\medskip
+
+\item  Unbalanced tree.
+
+\medskip
+
+\item  Complexity:
+
+\medskip
+
+\item  Limited use cases
+
+\medskip
+
+\item  Maintenance overhead.
+
+\medskip
+
+\item Limited scalability
+
+\medskip
+
+\end{enumerate}
+
+\bigskip
+
+\bigskip
+
+\begin{section}{Memory overhead}
+
+    "Memory overhead" trong Treap là một nhược điểm lớn, dẫn đến tăng memory usage so với các cấu trúc dữ liệu khác. Treap lưu trữ độ ưu tiên cho mỗi nút, ngoài giá trị khóa. Thông tin này có thể dẫn đến tăng memory usage, đặc biệt là đối với các bộ dữ liệu lớn. Việc sử dụng các kỹ thuật tối ưu bộ nhớ như compressed pointers hoặc bit-packing có thể giúp giảm bớt vấn đề này, nhưng đôi khi lại gây tăng thời gian tính toán. Do đó, cần phải xem xét và lựa chọn cấu trúc dữ liệu phù hợp với ứng dụng của mình, đặc biệt là trong trường hợp bộ nhớ bị hạn chế.
+
+\end{section}
+
+\begin{section}{Unbalanced tree}
+    Unbalanced tree có thể dẫn đến các thao tác tìm kiếm, chèn và xóa không hiệu quả. Khi giá trị ưu tiên của các nút được gán ngẫu nhiên hoặc kém hiệu quả, cây có thể trở nên không cân bằng và dẫn đến thời gian tìm kiếm dài hơn, thao tác chèn hoặc xóa cần phải thực hiện nhiều phép xoay để cân bằng cây. Việc chọn hàm ưu tiên và sử dụng các kỹ thuật cân bằng có thể giúp giảm thiểu vấn đề này.
+\end{section}
+\begin{section}{Complexity}
+    Treap với trường hợp xấu nhất có độ phức tạp là O(n) trong các thao tác tìm kiếm, chèn và xóa. Hơn nữa, độ phức tạp của Treap không được đảm bảo là cân bằng như các cấu trúc dữ liệu cây cân bằng khác như cây AVL và cây Red-Black. Điều này có thể dẫn đến hiệu suất không đáng tin cậy, khi độ phức tạp có thể thay đổi đáng kể tùy thuộc vào dữ liệu đầu vào.
+\end{section}
+\begin{section}{Limited use cases}
+    Treap chỉ hỗ trợ các thao tác tìm kiếm, chèn và xóa các phần tử trong cây. Nó không hỗ trợ các thao tác như tìm giá trị nhỏ nhất hoặc lớn nhất, hoặc duyệt cây theo một trật tự cụ thể. \\
+
+    Bên cạnh đó, Treap không phù hợp để lưu trữ các giá trị trùng lặp, vì nó không cung cấp bất kỳ cơ chế tích hợp nào để xử lý giá trị trùng lặp. Điều này có thể làm cho việc duy trì tập dữ liệu thống nhất và xử lý các trường hợp đặc biệt trở nên khó khăn.
+\end{section}
+\begin{section}{Maintenance overhead}
+    Nhược điểm khác của Treap là chi phí duy trì so với các cấu trúc dữ liệu khác. Cách thức xếp hạng ưu tiên ngẫu nhiên của mỗi nút có thể dẫn đến một cây không cân bằng, gây ảnh hưởng tiêu cực đến hiệu suất của Treap. \\
+
+    Để duy trì tính cân bằng của Treap, các hoạt động cân bằng như xoay có thể là cần thiết, gây thêm độ phức tạp và chi phí tính toán cho việc duy trì cấu trúc dữ liệu. Hơn nữa, do giá trị ưu tiên được tạo ngẫu nhiên, có một khả năng nhỏ rằng một số giá trị ưu tiên sẽ xảy ra trùng lắp, dẫn đến thêm chi phí.
+\end{section}
+\begin{section}{Limited scalability}
+    Chiều cao của một Treap không được đảm bảo là logarithmic, điều này có nghĩa là nó có thể giảm dần thành một danh sách liên kết, dẫn đến hiệu suất kém trong các hoạt động như tìm kiếm, chèn và xóa. \\
+
+    Hơn nữa, Treap không phù hợp để xử lý các tập dữ liệu lớn vì lượng bộ nhớ cần thiết để lưu trữ và bảo trì cấu trúc tăng theo số lượng phần tử. Điều này có thể dẫn đến vấn đề về tính mở rộng và làm cho nó ít thích hợp cho các ứng dụng yêu cầu xử lý lượng dữ liệu lớn một cách hiệu quả.
+
+\end{section}
+\end{document}
