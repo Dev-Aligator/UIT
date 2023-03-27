@@ -1,0 +1,77 @@
+\documentclass[12pt]{amsart}
+
+\addtolength{\hoffset}{-2.25cm}
+\addtolength{\textwidth}{4.5cm}
+\addtolength{\voffset}{-2.5cm}
+\addtolength{\textheight}{5cm}
+\setlength{\parskip}{0pt}
+\setlength{\parindent}{15pt}
+\usepackage[utf8]{vietnam}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[colorlinks = true, linkcolor = black, citecolor = black, final]{hyperref}
+
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{ marvosym }
+\usepackage{wasysym}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\ds}{\displaystyle}
+\DeclareMathOperator{\sech}{sech}
+
+
+\setlength{\parindent}{0in}
+
+\pagestyle{empty}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+{\scshape IE221.N23.CNCL} \hfill {\scshape \large A Comparison of List, Tuple, Dict in Python} \hfill {\scshape 2023}
+ 
+\smallskip
+
+\hrule
+
+\bigskip
+Python là một ngôn ngữ lập trình mạnh mẽ và phổ biến, nó cung cấp cho người dùng đa dạng các kiểu dữ liệu và cấu trúc để lưu trữ và xử lý dữ liệu. Trong số các kiểu dữ liệu này là list, tuple và dictionary, được sử dụng phổ biến để tổ chức và quản lý các tập dữ liệu. Trong bài viết này, chúng ta sẽ khám phá sự khác biệt giữa các kiểu dữ liệu này và các trường hợp sử dụng tương ứng của chúng.
+\bigskip
+
+\bigskip
+
+\begin{section}{List}
+
+    List là một tập dữ liệu có thứ tự và có khả năng thay đổi, bao gồm các đối tượng được bao quanh bởi dấu ngoặc vuông. Chúng có thể chứa các đối tượng thuộc các class khác nhau và cho phép các giá trị trùng lặp. List thường được sử dụng để lưu trữ các chuỗi dữ liệu, chẳng hạn như danh sách tên hoặc danh sách số. List có khả năng thay đổi, có nghĩa là nội dung của chúng có thể thay đổi sau khi chúng được tạo. Điều này làm cho list phù hợp cho các tình huống trong đó dữ liệu là động và có thể thay đổi theo thời gian.  \\
+
+
+    Ví dụ, một danh sách các mặt hàng mua sắm có thể được sửa đổi để thêm hoặc loại bỏ các mặt hàng khi cần thiết.
+
+\end{section}
+
+\begin{section}{Tuple}
+    Tuple là tập dữ liệu có thứ tự và không thể thay đổi, bao gồm các đối tượng được bao quanh bởi dấu ngoặc đơn. Giống như list, tuple có thể chứa các đối tượng thuộc các class khác nhau và cho phép các giá trị trùng lặp. Tuy nhiên, sau khi một tuple được tạo, nội dung của nó không thể thay đổi. Điều này làm cho tuple phù hợp cho các tình huống trong đó dữ liệu là tĩnh và không cần được sửa đổi.  \\
+
+    Ví dụ, tuple có thể được sử dụng để lưu trữ một tập hợp tọa độ biểu thị một vị trí cố định.
+
+\end{section}
+\begin{section}{Dictionary}
+    Dictionary là tập dữ liệu có khả năng thay đổi, không có thứ tự, bao gồm các cặp key-value được bao quanh bởi dấu ngoặc nhọn. Key là duy nhất và bất biến, trong khi giá trị có thể thay đổi. Dictionary cho phép truy cập nhanh vào giá trị bằng cách sử dụng key thay vì chỉ số, và thường được sử dụng để lưu trữ các thông tin với key là các chuỗi dữ liệu có ý nghĩa. \\
+
+    Ví dụ, một dictionary có thể được sử dụng để lưu trữ thông tin của một người với các key như "tên", "tuổi", "địa chỉ",...
+\end{section}
+\begin{section}{A brief comparison of the three data types}
+    Sự khác biệt chính giữa list, tuple và dictionary là cách chúng được sử dụng và khả năng thay đổi của chúng. List và dictionary có thể được sửa đổi, trong khi tuple không thể. List được sử dụng khi dữ liệu là động và có thể thay đổi theo thời gian, trong khi tuple được sử dụng khi dữ liệu là tĩnh và không cần được sửa đổi. Dictionary được sử dụng khi cần truy cập dữ liệu nhanh chóng bằng key thay vì chỉ số. \\
+
+    Để truy cập các phần tử trong list và tuple, chúng ta có thể sử dụng chỉ số, trong khi trong dictionary chúng ta sử dụng key. Để thêm một phần tử mới vào list hoặc dictionary, chúng ta có thể sử dụng các phương thức như append() hoặc update(). Trong khi đó, để tạo một tuple mới, chúng ta có thể sử dụng dấu ngoặc đơn và cách nhau bởi dấu phẩy. \\
+
+    Trong Python, các kiểu dữ liệu này cũng có thể được kết hợp với nhau để tạo ra các kiểu dữ liệu phức tạp hơn. Ví dụ, một list có thể chứa nhiều tuple và dictionary có thể chứa nhiều list hoặc tuple.
+
+\end{section}
+\begin{section}{Summary}
+    Tóm lại, trong Python, list, tuple và dictionary là các kiểu dữ liệu phổ biến được sử dụng để tổ chức và quản lý các tập dữ liệu. Sự khác biệt chính giữa chúng là trong cách chúng được sử dụng và khả năng thay đổi. List và dictionary được sử dụng khi dữ liệu là động và có thể thay đổi theo thời gian, trong khi tuple được sử dụng khi dữ liệu là tĩnh và không cần được sửa đổi.
+\end{section}
+\end{document}
