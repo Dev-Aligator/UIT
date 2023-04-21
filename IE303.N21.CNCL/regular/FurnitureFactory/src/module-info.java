@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * @author aligator
+ *
+ */
+module FurnitureFactory {
+}
