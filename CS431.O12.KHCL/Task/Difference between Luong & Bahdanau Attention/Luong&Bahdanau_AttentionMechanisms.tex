@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{xy}
+
+
+\usepackage{amsmath,amsthm,amssymb,color,latexsym}
+\usepackage{geometry}        
+\geometry{letterpaper}    
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[utf8]{vietnam}
+\newtheorem{problem}{Problem}
+
+\newenvironment{solution}[1][\it{Solution}]{\textbf{#1. } }{$\square$}
+
+
+\begin{document}
+\noindent UIT - CS431.O12.KHCL \hfill 20/11/2023 Task \\
+Nguyễn Hoàng Tân. (21521413)
+
+\hrulefill
+
+Luong Attention và Bahdanau Attention là hai mechanisms khác nhau được sử dụng trong context của attention mechanisms trong các mô hình machine translation (NMT). Các attention mechanisms này được thiết kế để giúp mô hình tập trung vào các phần khác nhau của chuỗi đầu vào khi tạo ra từng phần của chuỗi đầu ra. Hãy tìm hiểu về những khác biệt chính giữa Luong Attention và Bahdanau Attention:
+\section{Calculation of \textbf{Attention Score}s}
+
+\begin{itemize}
+	\item Bahdanau Attention: Được giới thiệu bởi Dzmitry Bahdanau vào năm 2014, cơ chế attention này tính \textbf{attention score} bằng cách sử dụng một feedforward neural network. Các \textbf{attention score} được học trong quá trình huấn luyện.
+	\item Luong Attention: Được đề xuất bởi Minh-Thang Luong vào năm 2015, cơ chế attention này tính \textbf{attention score} bằng cách sử dụng một tích vô hướng đơn giản hoặc một phép nhân giữa hidden state của decoder và hidden state của encoder.
+\end{itemize}
+\section{Alignment Vector}
+\begin{itemize}
+	\item Bahdanau Attention: Tính toán một alignment vector dựa trên tổng có trọng số của các hidden state của encoder, trong đó các trọng số chính là các attention scores.
+	\item Alignment vector được tính bằng cách lấy tổng trọng số của các hidden state của encoder, trong đó các trọng số là các attention scores.
+\end{itemize}
+\section{Scoring Mechanism}
+\begin{itemize}
+	\item Bahdanau Attention: Sử dụng một mô hình liên kết có thể học được (một mạng nơ-ron nhỏ) để tính điểm độ quan trọng của mỗi hidden state của encoder đối với một bước giải mã cụ thể.
+	\item Luong Attention: Sử dụng một cơ chế tính điểm đơn giản hơn, chẳng hạn như tích vô hướng hoặc tương tác nhân tích, mà không cần mạng nơ-ron bổ sung.
+\end{itemize}
+\section{Coverage Mechanism}
+\begin{itemize}
+	\item Tích hợp một coverage mechanism, giúp theo dõi những phần của chuỗi đầu vào đã được attended.
+	\item Ban đầu không bao gồm coverage mechanism, nhưng các biến thể sau như "Global Attention" đã được giới thiệu để giải quyết hạn chế này.
+\end{itemize}
+\section{Model Complexity}
+\begin{itemize}
+	\item Bahdanau Attention: Thường được coi là phức tạp về mặt tính toán do có mạng nơ-ron bổ sung được sử dụng để tính điểm.
+	\item Luong Attention: Đơn giản hơn về mặt tính toán vì sử dụng một cơ chế điểm trực tiếp mà không có mạng nơ-ron bổ sung.
+\end{itemize}
+\end{document}
