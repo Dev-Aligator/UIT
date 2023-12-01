@@ -214,35 +214,275 @@
 	\tableofcontents[currentsection]
 \end{frame}
 
-%------------------------------------------------
-% {
-% \begin{frame}
-% 	\frametitle{Methods for POS Tagging and NER}
-%     \setbeamertemplate{footline}{boo \insertframenumber}
-%     \begin{minipage}{0.5\textwidth}  % Adjust the width as needed
-%         {
-%         \setbeamercolor{block body}{bg=mylightgreencolor} % Block body color
-%         \begin{block}{} % Block without title
-%             HMM – Hidden Markov chains
-%         \end{block}
-%         }
-%         \begin{block}{} % Block without title
-%             CRF – Conditional Random Fields
-%         \end{block}
+
+\subsection{Pixel-Wise Comparison}
+\begin{frame}
+    \frametitle{Presentation Overview}
+    \tableofcontents[currentsubsection, sectionstyle=show/shaded, subsectionstyle=show/shaded]
+\end{frame}
+
+\subsection{Structural similarity index (SSIM)}
+
+\begin{frame}
+    \frametitle{Presentation Overview}
+    \tableofcontents[currentsubsection, sectionstyle=show/shaded, subsectionstyle=show/shaded]
+\end{frame}
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Structural similarity index (SSIM)}
         
-%     \end{minipage}\hspace{10pt}
-%     \begin{minipage}{0.45\textwidth}  % Adjust the width as needed
-%             \centering
-%             \includegraphics[scale=0.3]{POS-Tagging.jpg}
-%     \end{minipage}
-	
+        \begin{block}{Structural similarity index (SSIM)}
+            SSIM is used as a metric to measure the similarity between two given images
+            \begin{itemize}
+            \item Designed to mimic human perception in evaluating image quality.
+            \item It takes into account \textit{luminance, contrast}, and \textit{structure}.
+            \end{itemize}
+        \end{block}
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.9\linewidth]{SSIM.png}
+            \caption{Diagram of the structural similarity (SSIM) measurement system}
+        \end{figure}
+      
+\end{frame}
     
-% \end{frame}
-% }
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{SSIM: Luminance}
+        
+        \textbf{Luminance} is measured by \textbf{averaging} over all the pixel values. Its denoted by $\mu$ and the formula is given below:
+        \smallskip
+        {\Large
+        \begin{center}
+            $ \mu_x = \dfrac{1}{N} \sum_{i=1}^{N} x_i$
+        \end{center}
+        }
+
+        \begin{block}{The luminance comparison function $\ell(x,y)$}
+            {\Large
+            \begin{center}
+                $ \ell(x,y) = \dfrac{2\mu_{\textbf{x}} \mu_{\textbf{y}} + C_1}{\mu^2_{\textbf{x}} + \mu^2_{\textbf{y}} + C_1} $
+            \end{center}
+            }
+            \hspace{8em}\rule{0.5\textwidth}{0.4pt}
+            \begin{itemize}
+                \item $\mu_{\textbf{x}}, \hspace{0.2em} \mu_{\textbf{y}}$: Mean luminance of the first and second image.
+                \item $C_1 = (K_1 L)^2$: where L = 255 for 8-bit component images.
+                \item $K_1 = 0.01$: Default value
+            \end{itemize}
+        \end{block}
+        
+        
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{SSIM: Contrast}
+        
+        \textbf{Contrast} is measured by taking the standard deviation (square root of variance) of all the pixel values. It is denoted by $\sigma$
+        \smallskip
+        {\Large
+        \begin{center}
+            $ \sigma_x = \sqrt{\frac{1}{N-1} \sum_{i=1}^{N} (x_i - \mu_x)^2} $
+        \end{center}
+        }
+
+        \begin{block}{The luminance comparison function $\c(x,y)$}
+            {\Large
+            \begin{center}
+                $ c(x,y) = \dfrac{2\sigma_{\textbf{x}} \sigma_{\textbf{y}} + C_1}{\sigma^2_{\textbf{x}} + \sigma^2_{\textbf{y}} + C_1} $
+            \end{center}
+            }
+            \hspace{8em}\rule{0.5\textwidth}{0.4pt}
+            \begin{itemize}
+                \item {\Large$\sigma_{\textbf{x}}, \hspace{0.2em} \sigma_{\textbf{y}}$}: The standard deviation of pixel values
+                \item $C_2 = (K_2 L)^2$: where L = 255 for 8-bit component images.
+                \item $K_1 = 0.03$: Default value
+            \end{itemize}
+        \end{block}
+        
+        
+      
+\end{frame}
+    
+%------------------------------------------------
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{SSIM: Structure}
+        
+        The formula for covariance {\Large $\sigma_{xy}$} between $x$ and $y$ is given by:
+        \smallskip
+        {\Large
+        \begin{center}
+            $ \sigma_{xy} = \dfrac{1}{N-1} \sum_{i=1}^{N} (x_i - \mu_x)(y_i - \mu_y)
+              $
+        \end{center}
+        }
+
+        \begin{block}{Structure comparison function $s(x,y)$}
+            {\Large
+            \begin{center}
+                $ s(x,y) = \dfrac{\sigma_{\textbf{xy}} + C_3}{\sigma_{\textbf{x}} \sigma_{\textbf{y}} + C_3} $
+            \end{center}
+            }
+            \hspace{8em}\rule{0.5\textwidth}{0.4pt}
+            \begin{itemize}
+                \item {\Large $\sigma_{\textbf{xy}}$}: The covariance between $x$ and $y$.
+                \item $C_3 = C_2 / 2$.
+            \end{itemize}
+        \end{block}
+        
+        
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{The SSIM score}
+        
+        And finally, the SSIM score is given by,
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.8\linewidth]{SSIM_Formula.png}
+        \end{figure}
+            \begin{block}{}
+                Where $\alpha > 0, \beta > 0, \gamma > 0$ denote the importance of each of the metrics. 
+            \end{block}
+
+        To simplify the expression, if we assume, $\alpha = \beta = \gamma = 1$, we can get,
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.8\linewidth]{SSIM_Formula_Simp.png}
+        \end{figure}
+        
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Mean Structural Similarity Index}
+        
+        Instead of applying the above metrics globally, it’s better to apply the metrics regionally
+        \begin{block}{Mean Structural Similarity Index (MSSIM)}
+            For image quality assessment, it is useful to apply the SSIM index locally rather than globally.
+            \begin{itemize}
+                \item Image statistical features are usually highly spatially nonstationary.
+                \item Image distortions, which may or may not depend on the local image statistics, may also be space-variant.
+                \item Only a local area in the image can be perceived with high resolution by the human observer at one time instance 
+            \end{itemize}
+        \end{block}
+\end{frame}
+    
+%------------------------------------------------
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Mean Structural Similarity Index}
+        
+        
+        \begin{block}{Gaussian Weighing}
+            We use an 11x11 circular-symmetric Gaussian Weighing function 
+            \begin{itemize}
+                \item Moves pixel-by-pixel over the entire image.
+                \item At each step, the local statistics and SSIM index are calculated within the local window. 
+            \end{itemize}
+        \end{block}
+        \begin{minipage}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.9\linewidth]{gaussian_weighting.png}
+            \end{figure}
+        \end{minipage}
+        \begin{minipage}{0.39\textwidth}
+            \begin{center}
+                Where $w_i$ is the gaussian weighting function.
+            \end{center}
+        \end{minipage}
+       
+\end{frame}
+    
+%------------------------------------------------
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Mean Structural Similarity Index}
+        
+        Once computations are performed all over the image, we simply take the \textit{mean of all the local SSIM values} and arrive at the global SSIM value.
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=0.7\linewidth]{MSSIM_formula.png}
+        \end{figure}
+       
+\end{frame}
+    
+%------------------------------------------------
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{SSIM: Examples}
+        
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.8\linewidth]{SSIM_Example_1.png}
+        \end{figure}
+        
+       
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{SSIM: Examples}
+        
+        \begin{minipage}{0.6\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{MSSIM_Fig_1.png}
+                \captionsetup{labelformat=empty}
+                \caption{{\tiny MSSIM as a function of an increasingly brighter, constant-valued
+                image, B, against a black image (orange curve) and a white image (blue curve).}}
+            \end{figure}
+        \end{minipage}
+        \begin{minipage}{0.39\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{MSSIM_Fig_2.png}
+                \captionsetup{labelformat=empty}
+                \caption{{\tiny MSSIM behavior for constant grayscale images. }}
+            \end{figure}
+        \end{minipage}
+        
+        
+       
+\end{frame}
+    
+%------------------------------------------------
+\subsection{Siamese Network}
+
+\begin{frame}
+    \frametitle{Presentation Overview}
+    \tableofcontents[currentsubsection, sectionstyle=show/shaded, subsectionstyle=show/shaded]
+\end{frame}
 
 %------------------------------------------------
-\subsection{Pixel-Wise Comparison}
-\subsection{Siamese Network}
+
 \begin{frame}
     \onehalfspacing
         \frametitle{Siamese Network}
@@ -476,13 +716,17 @@
 		\footnotesize % Reduce the font size in the bibliography
 		
 		\bibitem[Stanford]{p1}
-			The Change You Want To See
+			\href{https://arxiv.org/pdf/2209.14341.pdf}{The Change You Want To See}
 			\newblock Ragav Sachdeva and Andrew Zisserman
 
-        \bibitem[Stanford]{p1}
-            Understanding SSIM
-			\newblock Jim Nilsson and Tomas Akenine-Möller
-			
+        \bibitem[Stanford]{p2}
+        \href{https://www.cns.nyu.edu/pub/eero/wang03-reprint.pdf}{Image Quality Assessment: From Error Visibility to
+        Structural Similarity}
+			\newblock Zhou Wang, Alan Conrad Bovik, Hamid Rahim Sheikh and Eero P. Simoncelli
+		
+        \hspace{-1.9em}\includegraphics[width=1.5em]{Icons/github.png}
+        \textcolor{blue}{\href{https://github.com/ragavsachdeva/The-Change-You-Want-to-See/tree/main?fbclid=IwAR0LKUHmVIEYSDTCgl2KeV5jir1pUlMSYJTbHbirilqWH_eZ4N9FxHwTQto\#datasets}{Datasets: The Change You Want to See (WACV 2023).}}
+          \newblock \textcolor{black}{Ragav Sachdeva and Andrew Zisserman}
 	\end{thebibliography}
 \end{frame}
 
