@@ -221,6 +221,249 @@
     \tableofcontents[currentsubsection, sectionstyle=show/shaded, subsectionstyle=show/shaded]
 \end{frame}
 
+%------------------------------------------------
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise}
+        
+        \begin{block}{Pixel-Wise Comparison}
+            Compare the input image pair by first detecting which \textbf{pixels} have \textbf{changed} between the first and second image and then \textbf{segmenting} those pixels into \textbf{clusters} that \textit{approximately} represent the objects that have changed.
+
+        \end{block}
+
+        Or, in short:
+        \begin{enumerate}
+            \item Detect pixels that have changed.
+            \item Perform clustering on those pixels.
+        \end{enumerate}
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        \begin{minipage}{0.9\textwidth}
+            \begin{block}{}
+                \textbf{Base approach}: pixel changes when its value is not the same.
+            \end{block}
+        \end{minipage}
+        
+        \bigskip
+
+        Well, it works fine… with digital changes (e.g. photoshop,...)
+
+        \bigskip
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\linewidth]{Pixel_wise_1.png}
+        \end{figure}
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        
+        
+        But fails horribly with non-digital changes (e.g. camera’s noises, environmental changes, …)
+
+
+        \bigskip
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\linewidth]{Pixel_wise_2.png}
+        \end{figure}
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        
+        
+        So, \textbf{some changes are tolerable}. Hence, we will need to compute the \textbf{distance} between two pixels and compare that against a \textbf{threshold} value.
+
+        \bigskip
+
+        \begin{figure}[h]
+            \centering
+            \includegraphics[width=\linewidth]{Pixel_wise_threshold.png}
+        \end{figure}
+
+        \bigskip
+
+        The most popular method of computing that distance is to compute the difference between the two pixels’ \textbf{luminosity} (convert images into grayscale and then compare its values).
+
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        
+        
+        However, some colours have similar \textbf{grayscale representation} despite not being the same color. 
+
+        \bigskip
+
+        \begin{figure}
+            \begin{subfigure}{0.5\textwidth}
+              \centering
+              \includegraphics[width=\linewidth]{RGB_color.png}
+              \captionsetup{labelformat=empty}
+              \caption{RGB(0, 0, 255) and RGB(0, 48, 0)}
+            \end{subfigure}%
+            \begin{subfigure}{0.5\textwidth}
+              \centering
+              \includegraphics[width=0.985\linewidth]{RGB_color_grayscale.png}
+              \captionsetup{labelformat=empty}
+              \caption{Convert to \textbf{grayscale}}
+            \end{subfigure}
+            \captionsetup{labelformat=empty}
+        \end{figure}
+
+        \bigskip
+
+        
+
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        
+        \begin{minipage}{0.53\textwidth}
+            \begin{block}{}
+                Distance between colours $C_1$ and $C_2$:
+            \end{block}
+        \end{minipage}
+        
+
+
+        \bigskip
+
+        \begin{figure}
+           \centering
+           \includegraphics[width=\linewidth]{color_distance.png}
+        \end{figure}
+
+        \bigskip
+
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-Wise: Detect changes in pixels}
+        
+        
+
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.85\linewidth]{Pixel_wise_color_distance_result.png}
+                \caption{ Result after applying the colour distance function}
+             \end{figure}
+        
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixelwise: Clustering
+        }
+        \begin{block}{}
+            As we only care about \textbf{objects} that have changed not changed pixels, we have to group those pixels \textbf{into clusters} that approximate those objects.
+        \end{block}
+
+
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{pixel_wise_clustering.png}
+             \end{figure}
+
+
+        And, due to the characteristics of those pixels (denser area is more likely to be an object than noises) \textbf{density based clustering algorithms} like \textit{DBScan} will perform well.
+        
+      
+\end{frame}
+    
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixelwise: Clustering
+        }
+        \begin{minipage}{0.8\textwidth}
+        \begin{block}{}
+            Finally. encapsulate those clusters with bounding boxes.
+        \end{block}
+    \end{minipage}
+
+    \bigskip
+
+            \begin{figure}
+                \centering
+                \includegraphics[width=\linewidth]{pixel_wise_clusters_with_bounding_boxes.png}
+             \end{figure}
+      
+\end{frame}
+    
+%------------------------------------------------
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{Pixel-wise optional: Remove non-interesting clusters
+        }
+        \begin{block}{}
+            In images from a surveillance video, a lot of unnecessary changes are detected like slight movement, reflective area, …
+        \end{block}
+
+        These clusters can be reduced by using a simple scoring system:
+
+        \hspace{4em}\rule{0.7\textwidth}{0.4pt}
+        \vspace{-0.5em}
+        {\small
+        \begin{center}
+            $ number\_of\_changed\_pixels + height\_of\_cluster \times 2 + width\_of\_cluster \geq threshold $
+        \end{center}
+        }
+        \vspace{-1em}
+        \hspace{4em}\rule{0.7\textwidth}{0.4pt}
+
+
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.55\linewidth]{Remove_non_interesting_clusters.png}
+             \end{figure}
+      
+\end{frame}
+    
+%------------------------------------------------
+
+
 \subsection{Structural similarity index (SSIM)}
 
 \begin{frame}
@@ -706,6 +949,28 @@
     \end{frame}
 
 %------------------------------------------------
+\section{Experiments}
+
+\begin{frame}
+    \doublespacing
+        \frametitle{Presentation Overview} % Slide title, remove this command for no title
+        
+        \tableofcontents[currentsection] % Output the table of contents (all sections on one slide)
+        %\tableofcontents[pausesections] % Output the table of contents (break sections up across separate slides)
+\end{frame}
+
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{ Evaluation Metrics}
+       
+        We evaluate 3 methods on detecting changes 
+        der full supervision.
+
+    \end{frame}
+
+%------------------------------------------------
+
 
 
 \onehalfspacing
