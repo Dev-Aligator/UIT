@@ -959,14 +959,58 @@
         %\tableofcontents[pausesections] % Output the table of contents (break sections up across separate slides)
 \end{frame}
 
+%------------------------------------------------
+
+\begin{frame}
+    \onehalfspacing
+        \frametitle{VIRAT Video Dataset}
+       
+        \begin{block}{VIRAT Video Dataset}
+            A large-scale surveillance video dataset includes videos collected from
+            stationary ground cameras and aerial vehicles. It has several event types:
+        
+            \begin{itemize}
+                \item \textbf{Single Person Events} (8): walking, running, standing,
+                throwing, gesturing, carrying, loitering, picking up
+                \item \textbf{Person and Vehicle Events} (7): getting into or out of
+                vehicle, opening or closing trunk, loading, unloading, dropping off, bicycling
+                \item \textbf{Person and Facility Events} (2): entering or exiting facility
+            \end{itemize}
+        \end{block}
+            \begin{figure}[h]
+                \centering
+                \includegraphics[width=\linewidth]{VIRAT_datasets.png}
+            \end{figure}
+
+    \end{frame}
+
+%------------------------------------------------
 
 \begin{frame}
     \onehalfspacing
         \frametitle{ Evaluation Metrics}
        
-        We evaluate 3 methods on detecting changes 
-        der full supervision.
+        \begin{block}{}
+            To assess the effectiveness of the proposed methods, we will employ key performance metrics: \textit{precision, recall, and F1 score}. 
+        \end{block}
 
+        We calculate these metrics for a set of ground truth and predicted bounding boxes corresponding to specific
+        image.
+
+        \begin{table}[htbp]
+            \centering
+            \caption{Performance Evaluation of Different Approaches}
+            \label{tab:performance}
+            \begin{tabular}{lccc}
+                \toprule
+                \textbf{Approach} & \textbf{Precision} & \textbf{Recall} & \textbf{F1 Score} \\
+                \midrule
+                Pixel-wise & .354 & . 584 & .441 \\
+                SSIM & .314 & .169 & .22 \\
+                Siamese Network & .354 & .584 & .441 \\
+                \bottomrule
+            \end{tabular}
+        \end{table}
     \end{frame}
 
 %------------------------------------------------
