@@ -35,10 +35,10 @@
         \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
             \usebeamerfont{author in head/foot}\insertshortauthor
         \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.7\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+        \begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
             \usebeamerfont{title in head/foot}\insertshorttitle
         \end{beamercolorbox}%
-        \begin{beamercolorbox}[wd=.1\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+        \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
             \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
         \end{beamercolorbox}%
     }%
@@ -476,7 +476,7 @@
         \frametitle{Structural similarity index (SSIM)}
         
         \begin{block}{Structural similarity index (SSIM)}
-            SSIM is used as a metric to measure the similarity between two given images
+            SSIM is used as a metric to measure the similarity between two given images which is a value between -1 and +1.
             \begin{itemize}
             \item Designed to mimic human perception in evaluating image quality.
             \item It takes into account \textit{luminance, contrast}, and \textit{structure}.
@@ -513,9 +513,9 @@
             }
             \hspace{8em}\rule{0.5\textwidth}{0.4pt}
             \begin{itemize}
-                \item $\mu_{\textbf{x}}, \hspace{0.2em} \mu_{\textbf{y}}$: Mean luminance of the first and second image.
+                \item {\Large $\mu_{\textbf{x}}, \hspace{0.2em} \mu_{\textbf{y}}$}: Mean luminance of the first and second image.
                 \item $C_1 = (K_1 L)^2$: where L = 255 for 8-bit component images.
-                \item $K_1 = 0.01$: Default value
+                \item $K_1 \ll 1$: Default value is $.01$
             \end{itemize}
         \end{block}
         
@@ -540,14 +540,14 @@
         \begin{block}{The luminance comparison function $\c(x,y)$}
             {\Large
             \begin{center}
-                $ c(x,y) = \dfrac{2\sigma_{\textbf{x}} \sigma_{\textbf{y}} + C_1}{\sigma^2_{\textbf{x}} + \sigma^2_{\textbf{y}} + C_1} $
+                $ c(x,y) = \dfrac{2\sigma_{\textbf{x}} \sigma_{\textbf{y}} + C_2}{\sigma^2_{\textbf{x}} + \sigma^2_{\textbf{y}} + C_2} $
             \end{center}
             }
             \hspace{8em}\rule{0.5\textwidth}{0.4pt}
             \begin{itemize}
                 \item {\Large$\sigma_{\textbf{x}}, \hspace{0.2em} \sigma_{\textbf{y}}$}: The standard deviation of pixel values
                 \item $C_2 = (K_2 L)^2$: where L = 255 for 8-bit component images.
-                \item $K_1 = 0.03$: Default value
+                \item $K_2 \ll 1$: Default value is $.03$
             \end{itemize}
         \end{block}
         
