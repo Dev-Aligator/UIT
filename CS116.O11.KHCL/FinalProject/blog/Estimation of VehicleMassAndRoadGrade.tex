@@ -53,7 +53,7 @@ Before delving into the machine learning models, it is crucial to conduct an Exp
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.5\textwidth]{Boxplot.png}
-    \caption{Box Plot of Feature Columns}
+    \caption{Box Plot of Feature Columns }
     \label{boxplot}
 \end{figure}
 
@@ -83,75 +83,72 @@ To mitigate the influence of outliers, We can utilize the \href{https://scikit-l
 
 Additionally, the strong negative correlation $(-0.63)$ between `\textbf{VehV\_v\_100ms}` and `\textbf{RngMod\_trqCrSmin\_100ms}` suggests the possibility of creating a new combined feature for improving model performance.
 
-\begin{figure}[h]
+\begin{figure*}[t]
     \centering
-    \includegraphics[width=0.5\textwidth]{Road_slope_distribution.png}
-    \caption{Distribution of RoadSlope}
+    \includegraphics[width=\textwidth, height=0.3\textheight]{Distribution.png}
     \label{fig:roadslopedistribution}
-\end{figure}
+\end{figure*}
 
 
-\subsection{Units}
+
+\section{Data Preprocessing}
+Having identified outliers, correlations, and distributions in the previous step, this section focuses on optimizing the dataset for the task. 
+\subsection{Feature Engineering and Reformatting}
 \begin{itemize}
-\item Use either SI (MKS) or CGS as primary units. (SI units are encouraged.) English units may be used as secondary units (in parentheses). An exception would be the use of English units as identifiers in trade, such as ``3.5-inch disk drive''.
-\item Avoid combining SI and CGS units, such as current in amperes and magnetic field in oersteds. This often leads to confusion because equations do not balance dimensionally. If you must use mixed units, clearly state the units for each quantity that you use in an equation.
-\item Do not mix complete spellings and abbreviations of units: ``Wb/m\textsuperscript{2}'' or ``webers per square meter'', not ``webers/m\textsuperscript{2}''. Spell out units when they appear in text: ``. . . a few henries'', not ``. . . a few H''.
-\item Use a zero before decimal points: ``0.25'', not ``.25''. Use ``cm\textsuperscript{3}'', not ``cc''.)
+\item Irrelevant constant features (`\textbf{CoVeh\_trqAcs\_100ms}`, `\textbf{Com\_rTSC1VRVCURtdrTq}`, `\textbf{Clth\_st`}, `\textbf{CoEng\_st}`, `\textbf{Com\_rTSC1VRRDTrqReq}`) are dropped as they provide no discriminatory information to distinguish between different instances. . 
+
+\item The `\textbf{Vehicle\_Mass}`' column is reformatted to binary encoding for classification.
+
+
 \end{itemize}
 
-\subsection{Equations}
-Number equations consecutively. To make your 
-equations more compact, you may use the solidus (~/~), the exp function, or 
-appropriate exponents. Italicize Roman symbols for quantities and variables, 
-but not Greek symbols. Use a long dash rather than a hyphen for a minus 
-sign. Punctuate equations with commas or periods when they are part of a 
-sentence, as in:
-\begin{equation}
-a+b=\gamma\label{eq}
+We create a new feature `\textbf{Combined\_VehV\_RngMod}` by combining '\textbf{RngMod\_trqCrSmin}' and '\textbf{VehV\_v}' using formula \ref{eq:1}. This combination is motivated by the strong negative correlation of $-0.63$ observed between these two variables.
+
+\begin{equation} \label{eq:1}
+    \hspace{-1em} Combined\_VehV\_RngMod = \dfrac{RngMod\_trqCrSmin\_100ms}{VehV\_v\_100ms}
 \end{equation}
 
-Be sure that the 
-symbols in your equation have been defined before or immediately following 
-the equation. Use ``\eqref{eq}'', not ``Eq.~\eqref{eq}'' or ``equation \eqref{eq}'', except at 
-the beginning of a sentence: ``Equation \eqref{eq} is . . .''
+\subsection{Task-specific Dataset Splitting}
+We initiate the dataset split into features and targets for both the regression and classification tasks, employing the same feature set for both predictions. 
 
-\subsection{\LaTeX-Specific Advice}
+However, we also introduce an alternative `\textbf{MultiTask}` approach. In this strategy, we utilize the predicted vehicle mass values to augment the prediction of road slope. \\
 
-Please use ``soft'' (e.g., \verb|\eqref{Eq}|) cross references instead
-of ``hard'' references (e.g., \verb|(1)|). That will make it possible
-to combine sections, add equations, or change the order of figures or
-citations without having to go through the file line by line.
+\noindent \textbf{Train-Dev-Test Splitting} \hspace{0.2em} The dataset is partitioned into training, development, and test sets for both regression and classification tasks. The distribution of the dataset across these sets is as follows:
 
-Please don't use the \verb|{eqnarray}| equation environment. Use
-\verb|{align}| or \verb|{IEEEeqnarray}| instead. The \verb|{eqnarray}|
-environment leaves unsightly spaces around relation symbols.
+\begin{itemize}
+    \item Training Set: 70\%
+    \item Development Set: 15\%
+    \item Test Set: 15\%
+\end{itemize}
 
-Please note that the \verb|{subequations}| environment in {\LaTeX}
-will increment the main equation counter even when there are no
-equation numbers displayed. If you forget that, you might write an
-article in which the equation numbers skip from (17) to (20), causing
-the copy editors to wonder if you've discovered a new method of
-counting.
+\subsection{Feature Scaling}
+As we observed numerous outliers in various features (Figure \ref{boxplot}). We address this problem by applying \href{https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html}{Robust scaling} to the features to ensure their uniformity across different scales. 
 
-{\BibTeX} does not work by magic. It doesn't get the bibliographic
-data from thin air but from .bib files. If you use {\BibTeX} to produce a
-bibliography you must send the .bib files. 
+I also experimented with alternative scaling methods to assess their impact on the overall model performance. The evaluation results are presented in Table \ref{tab:model_performance}.
 
-{\LaTeX} can't read your mind. If you assign the same label to a
-subsubsection and a table, you might find that Table I has been cross
-referenced as Table IV-B3. 
-
-{\LaTeX} does not have precognitive abilities. If you put a
-\verb|\label| command before the command that updates the counter it's
-supposed to be using, the label will pick up the last counter to be
-cross referenced instead. In particular, a \verb|\label| command
-should not go before the caption of a figure or a table.
-
-Do not use \verb|\nonumber| inside the \verb|{array}| environment. It
-will not stop equation numbers inside \verb|{array}| (there won't be
-any anyway) and it might stop a wanted equation number in the
-surrounding equation.
-
+\begin{table}[h]
+    \centering
+    \caption{Model Performance with Different Scaling Methods}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Scaling Method} & \textbf{Public Sets} & \textbf{Private Sets} \\
+    \midrule
+    RobustScaler & 98.86 & 75.5 \\
+    StandardScaler & 84.46 & 68.52 \\
+    MinMaxScaler & 81.2 & - \\
+    MaxAbsScaler & 79.64 & - \\
+    Normalizer & 64.73 & - \\
+    PowerTransformer & 53.5 & - \\
+    QuantileTransformer & 52.8 & - \\
+    \bottomrule
+    \end{tabular}
+    \begin{flushleft}
+        \small\textit{Note: Due to limited submit attempts for private sets, evaluation was performed with only two scalers.}
+        \end{flushleft}
+    \label{tab:model_performance}
+    \end{table}
+    
+\section{Model Selection}
 \subsection{Some Common Mistakes}\label{SCM}
 \begin{itemize}
 \item The word ``data'' is plural, not singular.
@@ -222,7 +219,7 @@ copy& More table copy$^{\mathrm{a}}$& &  \\
 \end{table}
 
 \begin{figure}[htbp]
-\centerline{\includegraphics{fig1.png}}
+% \centerline{\includegraphics{Boxplot.png}}
 \caption{Example of a figure caption.}
 \label{fig}
 \end{figure}
