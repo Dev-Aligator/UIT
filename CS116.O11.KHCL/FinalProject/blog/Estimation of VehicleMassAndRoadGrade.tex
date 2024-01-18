@@ -28,12 +28,12 @@
 \maketitle
 
 \begin{abstract}
-    The Estimation of Vehicle Mass and Road Grade is a crucial aspect of modern transportation systems. This report introduces a machine learning-based approach to estimate both the mass of a vehicle and the grade of the road using relevant data.
+    The Estimation of Vehicle Mass and Road Grade is a crucial aspect of modern transportation systems. This report details our approach, encompassing exploratory data analysis (EDA), feature engineering, data splitting, model selection, and evaluation, resulting in achieving the 1st rank in both public and private contest datasets.
 \end{abstract}
 
-\begin{IEEEkeywords}
-    Machine Learning, Vehicle Mass Estimation, Road Grade Estimation, Sensor Data, Supervised Learning, Feature Engineering.
-\end{IEEEkeywords}
+% \begin{IEEEkeywords}
+%     Machine Learning, Vehicle Mass Estimation, Road Grade Estimation, Sensor Data, Supervised Learning, Feature Engineering.
+% \end{IEEEkeywords}
 
 \section{Introduction}
 The Estimation of Vehicle Mass and Road Grade is a multifaceted challenge within the domain of transportation engineering, encompassing critical aspects such as fuel efficiency, vehicle performance, and overall safety. This project leverages machine learning methodologies to address this complex problem. We employ \href{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}{\textbf{Random Forest Classifier}} for Vehicle Mass and \href{https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html}{\textbf{K-Nearest Neighbors Regressor}} for Road Grade estimation, focusing on the utilization of diverse signals collected from a vehicle to predict both its mass and the grade of the road it traverses.
@@ -78,6 +78,7 @@ To mitigate the influence of outliers, We can utilize the \href{https://scikit-l
       \textbf{VehV\_v\_100ms} & -0.705378 & -0.630015 \\
       \bottomrule
     \end{tabular}
+    \vspace{0.5em}
     \caption{Correlation Matrix of Features}
     \label{tab:correlation}
 \end{table}
@@ -134,13 +135,13 @@ I also experimented with alternative scaling methods to assess their impact on t
     \toprule
     \textbf{Scaling Method} & \textbf{Public Sets} & \textbf{Private Sets} \\
     \midrule
-    RobustScaler & 98.86 & 75.5 \\
-    StandardScaler & 84.46 & 68.52 \\
-    MinMaxScaler & 81.2 & - \\
-    MaxAbsScaler & 79.64 & - \\
-    Normalizer & 64.73 & - \\
-    PowerTransformer & 53.5 & - \\
-    QuantileTransformer & 52.8 & - \\
+    RobustScaler & 88.03 & 86.63 \\
+    StandardScaler & 87.79 & 85.26 \\
+    MinMaxScaler & 83.66 & - \\
+    MaxAbsScaler & 83.66 & - \\
+    Normalizer & 65.83 & - \\
+    PowerTransformer & 85.87 & - \\
+    QuantileTransformer & 85.33 & - \\
     \bottomrule
     \end{tabular}
     \begin{flushleft}
@@ -239,56 +240,24 @@ Lastly, we will evaluate the performance of the two selected models, \textbf{Ran
         Classification Task & 0.999 & 1.000 & 0.998 \\
         Regression Task & 0.754 & 0.776 & 0.795 \\
         \midrule
-        Overall Score (Mean) & 0.877 & 0.888 &  0.897 \\
+        Overall Score (Mean) & 0.840 & 0.854 &  0.866 \\
         \bottomrule
         \vspace{0.5em}
     \end{tabular}
     \caption{Performance Scores on Public and Private Sets}
+
+    \begin{equation*}
+        OverallScore = 0.35 \times classification + 0.65 \times regression
+    \end{equation*}
     \begin{flushleft}
         \small\textit{Note: The classification performance is evaluated using the G-mean score, and the regression score is defined by the contest.}
         \end{flushleft}
+
+        
     \label{tab:evaluation}
 \end{table}
 
-\section*{Acknowledgment}
+This approach achieved the \textbf{1st} place on both the public test and private test of the course contest with scores of \textbf{199.86} and \textbf{86.63}, respectively. You can find the notebook, submission source code, and model parameters on \href{https://github.com/Dev-Aligator/UIT/tree/master/CS116.O11.KHCL/FinalProject}{GitHub}."
 
-The preferred spelling of the word ``acknowledgment'' in America is without 
-an ``e'' after the ``g''. Avoid the stilted expression ``one of us (R. B. 
-G.) thanks $\ldots$''. Instead, try ``R. B. G. thanks$\ldots$''. Put sponsor 
-acknowledgments in the unnumbered footnote on the first page.
-
-\section*{References}
-
-Please number citations consecutively within brackets \cite{b1}. The 
-sentence punctuation follows the bracket \cite{b2}. Refer simply to the reference 
-number, as in \cite{b3}---do not use ``Ref. \cite{b3}'' or ``reference \cite{b3}'' except at 
-the beginning of a sentence: ``Reference \cite{b3} was the first $\ldots$''
-
-Number footnotes separately in superscripts. Place the actual footnote at 
-the bottom of the column in which it was cited. Do not put footnotes in the 
-abstract or reference list. Use letters for table footnotes.
-
-Unless there are six authors or more give all authors' names; do not use 
-``et al.''. Papers that have not been published, even if they have been 
-submitted for publication, should be cited as ``unpublished'' \cite{b4}. Papers 
-that have been accepted for publication should be cited as ``in press'' \cite{b5}. 
-Capitalize only the first word in a paper title, except for proper nouns and 
-element symbols.
-
-For papers published in translation journals, please give the English 
-citation first, followed by the original foreign-language citation \cite{b6}.
-
-\begin{thebibliography}{00}
-\bibitem{b1} G. Eason, B. Noble, and I. N. Sneddon, ``On certain integrals of Lipschitz-Hankel type involving products of Bessel functions,'' Phil. Trans. Roy. Soc. London, vol. A247, pp. 529--551, April 1955.
-\bibitem{b2} J. Clerk Maxwell, A Treatise on Electricity and Magnetism, 3rd ed., vol. 2. Oxford: Clarendon, 1892, pp.68--73.
-\bibitem{b3} I. S. Jacobs and C. P. Bean, ``Fine particles, thin films and exchange anisotropy,'' in Magnetism, vol. III, G. T. Rado and H. Suhl, Eds. New York: Academic, 1963, pp. 271--350.
-\bibitem{b4} K. Elissa, ``Title of paper if known,'' unpublished.
-\bibitem{b5} R. Nicole, ``Title of paper with only first word capitalized,'' J. Name Stand. Abbrev., in press.
-\bibitem{b6} Y. Yorozu, M. Hirano, K. Oka, and Y. Tagawa, ``Electron spectroscopy studies on magneto-optical media and plastic substrate interface,'' IEEE Transl. J. Magn. Japan, vol. 2, pp. 740--741, August 1987 [Digests 9th Annual Conf. Magnetics Japan, p. 301, 1982].
-\bibitem{b7} M. Young, The Technical Writer's Handbook. Mill Valley, CA: University Science, 1989.
-\end{thebibliography}
-\vspace{12pt}
-\color{red}
-IEEE conference templates contain guidance text for composing and formatting conference papers. Please ensure that all template text is removed from your conference paper prior to submission to the conference. Failure to remove the template text from your paper may result in your paper not being published.
 
 \end{document}
