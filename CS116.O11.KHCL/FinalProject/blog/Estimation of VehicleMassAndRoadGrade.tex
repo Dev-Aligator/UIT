@@ -148,31 +148,61 @@ I also experimented with alternative scaling methods to assess their impact on t
     \label{tab:model_performance}
     \end{table}
     
-\section{Model Selection}
-\subsection{Some Common Mistakes}\label{SCM}
-\begin{itemize}
-\item The word ``data'' is plural, not singular.
-\item The subscript for the permeability of vacuum $\mu_{0}$, and other common scientific constants, is zero with subscript formatting, not a lowercase letter ``o''.
-\item In American English, commas, semicolons, periods, question and exclamation marks are located within quotation marks only when a complete thought or name is cited, such as a title or full quotation. When quotation marks are used, instead of a bold or italic typeface, to highlight a word or phrase, punctuation should appear outside of the quotation marks. A parenthetical phrase or statement at the end of a sentence is punctuated outside of the closing parenthesis (like this). (A parenthetical sentence is punctuated within the parentheses.)
-\item A graph within a graph is an ``inset'', not an ``insert''. The word alternatively is preferred to the word ``alternately'' (unless you really mean something that alternates).
-\item Do not use the word ``essentially'' to mean ``approximately'' or ``effectively''.
-\item In your paper title, if the words ``that uses'' can accurately replace the word ``using'', capitalize the ``u''; if not, keep using lower-cased.
-\item Be aware of the different meanings of the homophones ``affect'' and ``effect'', ``complement'' and ``compliment'', ``discreet'' and ``discrete'', ``principal'' and ``principle''.
-\item Do not confuse ``imply'' and ``infer''.
-\item The prefix ``non'' is not a word; it should be joined to the word it modifies, usually without a hyphen.
-\item There is no period after the ``et'' in the Latin abbreviation ``et al.''.
-\item The abbreviation ``i.e.'' means ``that is'', and the abbreviation ``e.g.'' means ``for example''.
-\end{itemize}
-An excellent style manual for science writers is \cite{b7}.
+\section{Models Selection}
+As mentioned above, we will use 2 separate models to address the distinct tasks at hand.
+\subsection{Vehicle Mass Classifier Task}\label{task:classifier}
 
-\subsection{Authors and Affiliations}
-\textbf{The class file is designed for, but not limited to, six authors.} A 
-minimum of one author is required for all conference articles. Author names 
-should be listed starting from left to right and then moving down to the 
-next line. This is the author sequence that will be used in future citations 
-and by indexing services. Names should not be listed in columns nor group by 
-affiliation. Please keep your affiliations as succinct as possible (for 
-example, do not differentiate among departments of the same organization).
+
+
+The objective of this task is to train a classifier to categorize a vehicle's mass into two classes: 38 t or 49 t. \\
+\noindent \textbf{Random Forest Classifier} \hspace{0.2em} An ensemble learning algorithm that operates by constructing a multitude of decision trees during training and outputting the mode of the classes for classification tasks.
+
+
+\begin{itemize}
+\item Each decision tree in the forest is trained on a random subset of the training data and provides an independent prediction
+\item The final classification result is determined by aggregating the predictions from all the individual trees.
+\end{itemize}
+
+In addition to the Random Forest classifier, we explored various other classifiers before selecting the final model. The experimentation involved evaluating different algorithms to assess their performance on the Vehicle Mass Classification task. 
+
+\begin{table}[ht]
+    \centering
+    \caption{G-mean Scores for Vehicle Mass Classification Models}
+    \begin{tabular}{lcc}
+    \toprule
+    \textbf{Classifier} & \textbf{Public Sets} & \textbf{Private Sets} \\
+    \midrule
+    SVC & 0.9959 & - \\
+    Logistic Regression & 0.9748 & - \\
+    Decision Tree Classification & 0.9977 & 0.9945 \\
+    Random Forest Classification & 0.9988 & 0.9984 \\
+    \bottomrule
+    \end{tabular}
+    \begin{flushleft}
+        \small\textit{Note: Due to limited submit attempts for private sets, evaluation was performed with only two best classifiers.}
+        \end{flushleft}
+    \label{tab:gmean-scores}
+\end{table}
+    
+
+
+\subsection{Road Slope Regression Task}
+In this task, the goal is to predict the road slope based on the given features. We'll assess the performance of selected models, including KNN Regressor, to achieve accurate predictions.
+
+\noindent \textbf{KNN Regressor} \hspace{0.2em} Predicts the target variable by considering the average or weighted average of the k-nearest data points in the feature space.
+
+The choice of the hyperparameter \texttt{n\_neighbors} in KNN Regressor is crucial, as it determines the number of neighbors that contribute to the prediction. This parameter needs to be carefully tuned for optimal performance.
+
+Below are the experimental results conducted with different values of \texttt{n\_neighbors}.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.5\textwidth]{regression_score.png}
+    \label{fig:different_k_results}
+    \caption{Regression Performance vs. Number of Neighbors (K)}
+\end{figure}
+
 
 \subsection{Identify the Headings}
 Headings, or heads, are organizational devices that guide the reader through 
