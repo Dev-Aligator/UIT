@@ -1,0 +1,17 @@
+Data description
+
+The data contains eleven signals from the vehicle. The first nine signals can be used as input for the prediction, the last two are the desired output:
+
+    Epm_nEng_100ms : average engine speed of one cylinder segment (rpm)
+    VehV_v_100ms : vehicle speed (km/h)
+    ActMod_trqInr_100ms : current, back-calculated inner engine torque (Nm)
+    RngMod_trqCrSmin_100ms : minimum engine torque at the crankshaft level (Nm)
+    CoVeh_trqAcs_100ms : torque demand of accessories (Nm)
+    Clth_st_100ms : debounced status of clutch (-)
+    CoEng_st_100ms : engine operation status (enum, 0 COENG_STANDBY, 1 COENG_READY, 2 COENG_CRANKING, 3 COENG_RUNNING, 4 COENG_STOPPING, 5 COENG_FINISH)
+    Com_rTSC1VRVCURtdrTq_100ms : desired torque or torque limit (%)
+    Com_rTSC1VRRDTrqReq_100ms : torque requested by retarder (%)
+    RoadSlope_100ms : actual slope from the ADASIS horizon (%, tan(slope) = (RoadSlope_100ms / 100))
+    Vehicle_Mass: the weight of the vehicle, either 38 t or 49 t
+
+Note that the data contains no time information and the order of recordings has been scrambled, so your algorithm needs to work on individual frames.
