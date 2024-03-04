@@ -180,7 +180,28 @@ def breadthFirstSearch(gameState):
     exploredSet = set()
     actions = collections.deque([[0]])
     temp = []
-    ### CODING FROM HERE ###
+    # While there are states to explore in the frontier:
+    while frontier:
+        # Dequeue the leftmost state from the frontier (BFS explores states level by level):
+        node = frontier.popleft() 
+
+        # Dequeue the corresponding sequence of actions taken to reach this state:
+        node_action = actions.popleft()
+
+        # Compared to DFS, BFS dequeues from the left end of the frontier and actions,
+        # ensuring it explores the shallowest states first, leading to the shortest path.
+        if isEndState(node[-1][-1]):
+            temp += node_action[1:]
+            break
+        if node[-1] not in exploredSet:
+            exploredSet.add(node[-1])
+            for action in legalActions(node[-1][0], node[-1][1]):
+                newPosPlayer, newPosBox = updateState(node[-1][0], node[-1][1], action)
+                if isFailed(newPosBox):
+                    continue
+                frontier.append(node + [(newPosPlayer, newPosBox)])
+                actions.append(node_action + [action[-1]])
+    return temp
 
 def cost(actions):
     """A cost function"""
@@ -224,7 +245,6 @@ def get_move(layout, player_pos, method):
     gameState = transferToGameState2(layout, player_pos)
     posWalls = PosOfWalls(gameState)
     posGoals = PosOfGoals(gameState)
-    print('Auto Solving Start (%s)' %(method))
     if method == 'dfs':
         result = depthFirstSearch(gameState)
     elif method == 'bfs':        
