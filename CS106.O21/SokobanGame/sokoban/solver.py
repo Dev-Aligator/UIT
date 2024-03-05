@@ -219,7 +219,35 @@ def uniformCostSearch(gameState):
     actions = PriorityQueue()
     actions.push([0], 0)
     temp = []
-    ### CODING FROM HERE ###
+
+    # Explore states while frontier is not empty
+    while not frontier.isEmpty():
+        # Dequeue the state with the lowest cost from frontier
+        node = frontier.pop()
+
+        # Dequeue the corresponding sequence of actions
+        node_action = actions.pop()
+
+        if isEndState(node[-1][-1]):
+            temp += node_action[1:]
+            break
+        if node[-1] not in exploredSet:
+            exploredSet.add(node[-1])
+            for action in legalActions(node[-1][0], node[-1][1]):
+                newPosPlayer, newPosBox = updateState(node[-1][0], node[-1][1], action)
+                if isFailed(newPosBox):
+                    continue
+                
+                # Calculate the cost of the new action sequence
+                new_node_action = node_action + [action[-1]]
+                action_cost = cost(new_node_action[1:])
+
+                # Enqueue the new state with its cost into the frontier
+                frontier.push(node + [(newPosPlayer, newPosBox)], action_cost)
+
+                # Enqueue the new action sequence with its cost into actions
+                actions.push(new_node_action, action_cost)
+    return temp
 
 """Read command"""
 def readCommand(argv):
