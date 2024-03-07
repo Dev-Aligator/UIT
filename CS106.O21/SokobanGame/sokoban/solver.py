@@ -4,6 +4,8 @@ import numpy as np
 import heapq
 import time
 import numpy as np
+from heuristics import heuristic_displaced
+
 global posWalls, posGoals
 class PriorityQueue:
     """Define a PriorityQueue data structure that will be used"""
@@ -207,6 +209,12 @@ def cost(actions):
     """A cost function"""
     return len([x for x in actions if x.islower()])
 
+def heuristic_function(gameState, function="displayed"):
+    if function == "displayed":
+        return heuristic_displaced(PosOfBoxes(gameState), posGoals)
+    else:
+        raise ValueError('Invalid heuristic function.')
+
 def uniformCostSearch(gameState):
     """Implement uniformCostSearch approach"""
     beginBox = PosOfBoxes(gameState)
@@ -249,6 +257,91 @@ def uniformCostSearch(gameState):
                 actions.push(new_node_action, action_cost)
     return temp
 
+
+def greedySearch(gameState):
+    """Implement GreedySearch Approach"""
+    beginBox = PosOfBoxes(gameState)
+    beginPlayer = PosOfPlayer(gameState)
+
+    startState = (beginPlayer, beginBox)
+    frontier = PriorityQueue()
+    frontier.push([startState], 0)
+
+    exploredSet = set()
+    actions = PriorityQueue()
+    actions.push([0], 0)
+    temp = []
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        node_action = actions.pop()
+
+        if isEndState(node[-1][-1]):
+            temp += node_action[1:]
+            break
+        if node[-1] not in exploredSet:
+            exploredSet.add(node[-1])
+            for action in legalActions(node[-1][0], node[-1][1]):
+                newPosPlayer, newPosBox = updateState(node[-1][0], node[-1][1], action)
+                if isFailed(newPosBox):
+                    continue
+                
+                # Calculate the heuristic value for the new state
+                heuristic_value = heuristic_function(gameState)
+
+                # Enqueue the new state with its heuristic value into the frontier
+                frontier.push(node + [(newPosPlayer, newPosBox)], heuristic_value)
+
+                # Enqueue the new action sequence with its heuristic value into actions
+                actions.push(node_action + [action[-1]], heuristic_value) 
+    return temp
+
+def A_Star(gameState):
+    """Implement A* approach"""
+
+    beginBox = PosOfBoxes(gameState)
+    beginPlayer = PosOfPlayer(gameState)
+
+    startState = (beginPlayer, beginBox)
+    frontier = PriorityQueue()
+    frontier.push([startState], 0)
+
+    exploredSet = set()
+    actions = PriorityQueue()
+    actions.push([0], 0)
+    temp = []
+
+    while not frontier.isEmpty():
+        node = frontier.pop()
+        node_action = actions.pop()
+
+        if isEndState(node[-1][-1]):
+            temp += node_action[1:]
+            break
+        if node[-1] not in exploredSet:
+            exploredSet.add(node[-1])
+            for action in legalActions(node[-1][0], node[-1][1]):
+                newPosPlayer, newPosBox = updateState(node[-1][0], node[-1][1], action)
+                if isFailed(newPosBox):
+                    continue
+                
+                # Calculate the heuristic value and cost for the new state
+                current_node_action = node_action + [action[-1]]
+                heuristic_value = heuristic_function(gameState)
+                action_cost = cost(current_node_action[1:])
+
+                # Calculate the combined value (f-value) for the new state
+                f_value = heuristic_value + action_cost
+
+                # Enqueue the new state with its combined value into the frontier
+                frontier.push(node + [(newPosPlayer, newPosBox)], f_value)
+
+                # Enqueue the new action sequence with its combined value into actions
+                actions.push(current_node_action, f_value)
+    return temp
+
+
+
 """Read command"""
 def readCommand(argv):
     from optparse import OptionParser
@@ -279,9 +372,14 @@ def get_move(layout, player_pos, method):
         result = breadthFirstSearch(gameState)
     elif method == 'ucs':
         result = uniformCostSearch(gameState)
+    elif method == 'greedy':
+        result = greedySearch(gameState)
+    elif method == 'a*':
+        result = A_Star(gameState)
     else:
         raise ValueError('Invalid method.')
     time_end=time.time()
     print('Runtime of %s: %.2f second.' %(method, time_end-time_start))
+    print('Number of Moves: ', len(result))
     print(result)
     return result
