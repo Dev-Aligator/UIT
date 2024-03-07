@@ -75,6 +75,9 @@ class Game:
                         self.index_level = 1
                     self.scores.save()
                     self.load_level()
+
+                    ### Automatically trigger search engine
+                    self.auto_move()
             if event.key == K_r:
                 # Restart current level
                 self.load_level()
@@ -111,7 +114,7 @@ class Game:
         return nb_missing_target == 0
 
     def auto_move(self):
-        strategy = get_move(self.level.structure[:-1], self.level.position_player, 'dfs')
+        strategy = get_move(self.level.structure[:-1], self.level.position_player, 'a*')
         # strategy = get_move(self.level.structure[:-1], self.level.position_player, 'bfs')
         # strategy = get_move(self.level.structure[:-1], self.level.position_player, 'ucs')
         # with open("assets/sokobanSolver/Solverlevel_" + str(self.index_level) + ".txt", 'w+') as solver_file:
