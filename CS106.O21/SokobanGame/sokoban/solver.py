@@ -4,7 +4,7 @@ import numpy as np
 import heapq
 import time
 import numpy as np
-from heuristics import heuristic_displaced
+from heuristics import heuristic_displaced, heuristic_manhattan_distance
 
 global posWalls, posGoals
 class PriorityQueue:
@@ -210,8 +210,11 @@ def cost(actions):
     return len([x for x in actions if x.islower()])
 
 def heuristic_function(gameState, function="displayed"):
+    posBox = PosOfBoxes(gameState)
     if function == "displayed":
-        return heuristic_displaced(PosOfBoxes(gameState), posGoals)
+        return heuristic_displaced(posBox, posGoals)
+    elif function == "manhattan":
+        return heuristic_manhattan_distance(posBox, posGoals)
     else:
         raise ValueError('Invalid heuristic function.')
 
