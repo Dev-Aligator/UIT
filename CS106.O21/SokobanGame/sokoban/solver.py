@@ -209,8 +209,8 @@ def cost(actions):
     """A cost function"""
     return len([x for x in actions if x.islower()])
 
-def heuristic_function(gameState, function="displayed"):
-    posBox = PosOfBoxes(gameState)
+def heuristic_function(posBox, function="displayed"):
+    # posBox = PosOfBoxes(gameState)
     if function == "displayed":
         return heuristic_displaced(posBox, posGoals)
     elif function == "manhattan":
@@ -290,7 +290,7 @@ def greedySearch(gameState):
                     continue
                 
                 # Calculate the heuristic value for the new state
-                heuristic_value = heuristic_function(gameState)
+                heuristic_value = heuristic_function(newPosBox)
 
                 # Enqueue the new state with its heuristic value into the frontier
                 frontier.push(node + [(newPosPlayer, newPosBox)], heuristic_value)
@@ -330,7 +330,7 @@ def A_Star(gameState):
                 
                 # Calculate the heuristic value and cost for the new state
                 current_node_action = node_action + [action[-1]]
-                heuristic_value = heuristic_function(gameState)
+                heuristic_value = heuristic_function(newPosBox)
                 action_cost = cost(current_node_action[1:])
 
                 # Calculate the combined value (f-value) for the new state
