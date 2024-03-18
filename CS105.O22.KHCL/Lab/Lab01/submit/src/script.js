@@ -30,6 +30,7 @@ var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, 
 var storedImageData;
 
 var drawingMethod = "using_point";
+methodInstructionNotification(drawingMethod);
 
 function createPainter(painterType) {
     storedImageData = context.getImageData(0, 0, width, height);
@@ -52,6 +53,8 @@ document.querySelectorAll('.option').forEach(function(option) {
             document.querySelector('.method.using_point').click();
         }
         changeVisible(document.querySelector('.method.without_point')); /// Conditionally hide or show the "without_point" option 
+
+        methodInstructionNotification(drawingMethod); /// Display the instruction
         
         document.querySelectorAll('.option').forEach(function(opt) {
             opt.classList.remove('chosen');
@@ -71,6 +74,8 @@ document.querySelectorAll('.method').forEach(function(method) {
         document.querySelectorAll('.method').forEach(function(met) {
             met.classList.remove('chosen');
         });
+
+        methodInstructionNotification(drawingMethod); /// Display the instruction
 
         // Add the 'chosen' class to the clicked option
         this.classList.add('chosen');
@@ -183,3 +188,40 @@ clearButton.addEventListener("click", function() {
     state = 0;
     painter.imageData = context.createImageData(canvas.width, canvas.height);
 });
+
+window.addEventListener('resize', function() {
+    // Call the showNotification function when a resize event is detected
+    showNotification("Phát hiện bạn vừa resize cửa sổ, để có trải nghiệm tốt nhất hãy refresh lại trang web", 7000);
+  });
+  
+function methodInstructionNotification(method) {
+    if(method == "using_point") {
+        if (painter.type == "midpoint") {
+            showNotification("Để vẽ hình tròn, đầu tiên nhấp chuột để vẽ tâm, sau đó nhấp một lần nữa để chọn bán kính, ", 300000);
+        }
+        else {
+            showNotification("Để vẽ, hãy nhấp chuột để tạo điểm, các điểm sẽ nối lại thành 1 đường thẳng, Nhấn ESC để ngắt đường thẳng hiện tại", 300000);
+        }
+    }
+
+    if(method == "without_point") {
+        showNotification("Đè chuột trái và di chuột để vẽ, thả chuột để dừng vẽ", 300000);
+    }
+}
+
+function showNotification(text, timeout=30000) {
+    var notification = document.getElementById('notification');
+    notification.style.display = 'block';
+    notification.innerHTML = text;
+  
+    // Hide the notification after 3 seconds (3000 milliseconds)
+    setTimeout(function() {
+      closeNotification();
+    }, timeout);
+  }
+  
+  function closeNotification() {
+    var notification = document.getElementById('notification');
+    notification.style.display = 'none';
+  }
+  
