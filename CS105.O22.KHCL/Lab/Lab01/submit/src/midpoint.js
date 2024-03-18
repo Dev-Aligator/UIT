@@ -1,11 +1,12 @@
-function DDAPainter(context, width, height, imageData) {
-    this.type = "dda";
+function MidPointPainter(context, width, height, imageData) {
+    this.type = "midpoint";
     this.context = context;
     // this.imageData = context.createImageData(width, height);
     this.points = [];
     this.now = [-1, -1];
     this.width = width;
     this.height = height;
+
     if (imageData){
         this.imageData = imageData;
     }
@@ -45,39 +46,33 @@ function DDAPainter(context, width, height, imageData) {
         this.context.putImageData(this.imageData, 0, 0);
     }
 
-    this.drawLine = function(p0, p1, rgba) {
-        if (p0 == undefined) return;
+    this.drawCircle = function(p0, p1, rgba) {
         var x0 = p0[0], y0 = p0[1];
         var x1 = p1[0], y1 = p1[1];
-        var dx = x1 - x0, dy = y1 - y0;
-        if (Math.abs(dy) <= Math.abs(dx)) {
-            if (x1 < x0) {
-                var tx = x0; x0 = x1; x1 = tx;
-                var ty = y0; y0 = y1; y1 = ty;
-            }
+        var radius = Math.round(Math.sqrt(Math.pow(x1 - x0, 2) + Math.pow(y1 - y0, 2)));
+        var x = radius;
+        var y = 0;
+        var p = 1 - radius;
 
-            var k = dy / dx;
-            var y = y0;
+        while (x >= y) {
+            this.setPixel(x0 + x, y0 + y, rgba);
+            this.setPixel(x0 - x, y0 + y, rgba);
+            this.setPixel(x0 + x, y0 - y, rgba);
+            this.setPixel(x0 - x, y0 - y, rgba);
+            this.setPixel(x0 + y, y0 + x, rgba);
+            this.setPixel(x0 - y, y0 + x, rgba);
+            this.setPixel(x0 + y, y0 - x, rgba);
+            this.setPixel(x0 - y, y0 - x, rgba);
 
-            for (var x = x0; x <= x1; x++) {
-                this.setPixel(x, Math.floor(y + 0.5), rgba);
-                y = y + k;
-            }
-        }
+            y++;
 
-        else {
-            if (y1 < y0) {
-                var tx = x0; x0 = x1; x1 = tx;
-                var ty = y0; y0 = y1; y1 = ty;
-            }
-
-            var k = dx / dy;
-            var x = x0;
-
-            for (var y = y0; y <= y1; ++y){
-                this.setPixel(Math.floor(x + 0.5), y, rgba);
-                x = x + k;
+            if (p <= 0)
+                p = p + 2 * y + 1;
+            else {
+                x--;
+                p = p + 2 * y - 2 * x + 1;
             }
         }
+        this.context.putImageData(this.imageData, 0, 0);
     }
 }

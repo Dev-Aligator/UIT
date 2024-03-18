@@ -1,10 +1,17 @@
-function BresenhamPainter(context, width, height) {
+function BresenhamPainter(context, width, height, imageData) {
+    this.type = "bresenham";
     this.context = context;
-    this.imageData = context.createImageData(width, height);
+    // this.imageData = context.createImageData(width, height);
     this.points = [];
     this.now = [-1, -1];
     this.width = width;
     this.height = height;
+    if (imageData){
+        this.imageData = imageData;
+    }
+    else {
+        this.imageData = context.createImageData(width, height);
+    }
 
     this.getPixelIndex = function(x, y) {
         if (x < 0 || y < 0  || x > this.width || y > this.height)
