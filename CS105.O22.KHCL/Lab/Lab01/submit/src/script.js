@@ -28,6 +28,7 @@ canvas.setAttribute("height", height);
 canvas.style.backgroundColor = bgRgba;
 var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height));
 var storedImageData;
+var tempImageData;
 
 var drawingMethod = "using_point";
 methodInstructionNotification(drawingMethod);
@@ -140,39 +141,85 @@ doMouseDown = function(e) {
         if (painter.points.length == 0){            /// Draw the center point then wait for the second point
             painter.addPoint(p);
             painter.drawPoint(p, pointRgba);
+            tempImageData = new ImageData(
+                new Uint8ClampedArray(painter.imageData.data),
+                painter.imageData.width,
+                painter.imageData.height
+            )
+            canvas.addEventListener('mousemove', doMouseMoveDrawCircleV);
+            state = 2;
             return;
         }
         else{
             painter.drawCircle(painter.points[0], p, lineRgba);   /// When we have 2 points, draw the circle
             painter.points = [];
+            state = 1;
+            canvas.removeEventListener('mousemove', doMouseMoveDrawCircleV);
             return;
         }
         
     }
 
     //// Here we draw lines using DDA and Bresenham
-    if (state == 0) {  /// When there is only 1 point ( or after we pressed ESC ) 
-        state = 1;      
+    if (painter.points.length == 0) {
         painter.addPoint(p);
-        painter.drawPoint(p, pointRgba); // We draw that point, then wait for the next point before drawing a line
-        return;
+        painter.drawPoint(p, pointRgba);
+        tempImageData = new ImageData(
+            new Uint8ClampedArray(painter.imageData.data),
+            painter.imageData.width,
+            painter.imageData.height
+        )
+        canvas.addEventListener('mousemove', doMouseMoveDrawV);
+        state = 2;
+    }   
+    else {
+        painter.drawLine(painter.points[painter.points.length-1], p , lineRgba);
+        painter.drawPoint(p, pointRgba);
+        painter.points = [];
+        canvas.removeEventListener('mousemove', doMouseMoveDrawV);
+        state = 1;
     }
+}
 
-    /// When there is more than 1 points
-    painter.drawLine(painter.points[painter.points.length - 1 ], p, lineRgba);
-    painter.addPoint(p);
-    painter.drawPoint(p, pointRgba);
+function doMouseMoveDrawV(e) {
+    if (state != 2 || painter.type == "midpoint") return;
+    painter.imageData = new ImageData(
+        new Uint8ClampedArray(tempImageData.data),
+        tempImageData.width,
+        tempImageData.height
+    );
+    let v_point = getPosOnCanvas(e.clientX, e.clientY);
+    painter.drawLine(painter.points[0], v_point, vlineRgba);
+}
+
+function doMouseMoveDrawCircleV(e) {
+    if (state != 2 || painter.type != "midpoint" ) return;
+    painter.imageData = new ImageData(
+        new Uint8ClampedArray(tempImageData.data),
+        tempImageData.width,
+        tempImageData.height
+    );
+    let v_point = getPosOnCanvas(e.clientX, e.clientY);
+    painter.drawCircle(painter.points[0], v_point, vlineRgba);
 }
 
 doKeyDown = function(e) {
     var keyId = e.keyCode ? e.keyCode : e.which;
 
-    if (keyId == 27) { /// Press ESC to stop connect the lastet point to the new one - draw a new path
+    if (keyId == 27 && state == 2) { /// Press ESC to stop connect the lastet point to the new one - draw a new path
         state = 0;
+        painter.imageData = new ImageData(
+            new Uint8ClampedArray(tempImageData.data),
+            tempImageData.width,
+            tempImageData.height
+        );
+        painter.context.putImageData(painter.imageData, 0,0);
+        painter.drawPoint(painter.points[0], bgRgba);
+        painter.points = [];
     }
 }
-
-// canvas.addEventListener('mousemove', doMouseMove);
+// canvas.addEventListener('mousemove', doMouseMoveDrawV);
+// canvas.addEventListener('mousemove', doMouseMoveDrawCircleV);
 canvas.addEventListener('mousedown', doMouseDown);
 document.addEventListener('keydown', doKeyDown);
 
@@ -200,7 +247,7 @@ function methodInstructionNotification(method) {
             showNotification("Để vẽ hình tròn, đầu tiên nhấp chuột để vẽ tâm, sau đó nhấp một lần nữa để chọn bán kính, ", 300000);
         }
         else {
-            showNotification("Để vẽ, hãy nhấp chuột để tạo điểm, các điểm sẽ nối lại thành 1 đường thẳng, Nhấn ESC để ngắt đường thẳng hiện tại", 300000);
+            showNotification("Để vẽ, hãy nhấp chuột để tạo điểm bắt đầu, sau đó di chuột để chọn điểm cuối - Nhấn ESC để hủy đường đang vẽ", 300000);
         }
     }
 

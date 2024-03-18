@@ -6,12 +6,14 @@ function DDAPainter(context, width, height, imageData) {
     this.now = [-1, -1];
     this.width = width;
     this.height = height;
+    
     if (imageData){
         this.imageData = imageData;
     }
     else {
         this.imageData = context.createImageData(width, height);
     }
+
 
     this.getPixelIndex = function(x, y) {
         if (x < 0 || y < 0  || x > this.width || y > this.height)
@@ -29,7 +31,6 @@ function DDAPainter(context, width, height, imageData) {
         for (var i = 0; i < 4; i++) {
             this.imageData.data[pixelIndex + i] = rgba[i];
         }
-        // console.log("work!!");
 
     }
 
