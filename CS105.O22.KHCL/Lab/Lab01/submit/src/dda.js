@@ -79,5 +79,6 @@ function DDAPainter(context, width, height, imageData) {
                 x = x + k;
             }
         }
+        this.context.putImageData(this.imageData, 0, 0);
     }
 }

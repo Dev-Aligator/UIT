@@ -79,6 +79,7 @@ function BresenhamPainter(context, width, height, imageData) {
                 p += 2 * dy - 2 * dx;
             }
         }
+        this.context.putImageData(this.imageData, 0, 0);
     }
     
     

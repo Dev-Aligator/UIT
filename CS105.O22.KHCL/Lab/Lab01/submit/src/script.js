@@ -13,8 +13,10 @@ var vlineRgba = [255, 0, 0, 255];
 canvas.setAttribute("width", width);
 canvas.setAttribute("height", height);
 
-var painter;
+var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height));
 var storedImageData;
+
+var drawingMethod = "using_point";
 
 function createPainter(painterType) {
     storedImageData = context.getImageData(0, 0, width, height);
@@ -33,7 +35,6 @@ document.querySelectorAll('.option').forEach(function(option) {
         var painterType = this.classList[1]; // Extract the painter type from the class
         createPainter(painterType); // Create the corresponding painter
         // Additional logic if needed, such as clearing canvas or resetting state
-
         // Remove the 'chosen' class from all options
         document.querySelectorAll('.option').forEach(function(opt) {
             opt.classList.remove('chosen');
@@ -44,11 +45,27 @@ document.querySelectorAll('.option').forEach(function(option) {
     });
 });
 
+document.querySelectorAll('.method').forEach(function(method) {
+    method.addEventListener('click', function() {
+        var selectedMethod = this.classList[1]; // Extract the painter type from the class
+        drawingMethod = selectedMethod; // Create the corresponding painter
+        painter.points = [];
+        // Additional logic if needed, such as clearing canvas or resetting state
+        // Remove the 'chosen' class from all options
+        document.querySelectorAll('.method').forEach(function(met) {
+            met.classList.remove('chosen');
+        });
+
+        // Add the 'chosen' class to the clicked option
+        this.classList.add('chosen');
+    });
+});
+
+
 
 
 
 var state = 0;
-
 
 
 getPosOnCanvas = function(x, y){
@@ -57,22 +74,45 @@ getPosOnCanvas = function(x, y){
             Math.floor(y - bbox.top * (canvas.height / bbox.height) + 0.5)];
 }
 
-doMouseMove = function(e) {
-    if (state == 0 || state == 2) {
-        return;
-    }
+// doMouseMove = function(e) {
+//     var p = getPosOnCanvas(e.clientX, e.clientY);
+//     painter.drawLine(painter.points[painter.points.length - 1], p, lineRgba);
+//     painter.addPoint(p);
+    
+// }
 
-    var p = getPosOnCanvas(e.clientX, e.clientY);
-    // painter.draw(p);
-    painter.drawPoint(p, pointRgba);
-    // console.log(p);
-}
+
+var isMouseDown = false;
+
+canvas.addEventListener('mousedown', function(e) {
+    isMouseDown = true;
+    if (drawingMethod == "without_point"){
+        var p = getPosOnCanvas(e.clientX, e.clientY);
+        painter.addPoint(p);
+    }
+});
+
+canvas.addEventListener('mousemove', function(e) {
+    if (isMouseDown && drawingMethod == "without_point") {
+        var p = getPosOnCanvas(e.clientX, e.clientY);
+        painter.drawLine(painter.points[painter.points.length - 1], p, lineRgba);
+        painter.addPoint(p);
+    }
+});
+
+canvas.addEventListener('mouseup', function(e) {
+    isMouseDown = false;
+});
+
+
+
 
 doMouseDown = function(e) {
     
-    // if (state == 2 || state != 0 ) {
-    //     return;
-    // }
+
+    if (e.button != 0 || drawingMethod == "without_point") {
+        return;
+    }
     
     var p = getPosOnCanvas(e.clientX, e.clientY);
     if (painter.type == "midpoint") {
@@ -91,9 +131,7 @@ doMouseDown = function(e) {
 
     if (state == 0) {
         state = 1;
-        // var p = getPosOnCanvas(e.clientX, e.clientY);
         painter.addPoint(p);
-        // painter.draw(p);
         painter.drawPoint(p, pointRgba);
         return;
     }
@@ -101,12 +139,7 @@ doMouseDown = function(e) {
 
     painter.drawLine(painter.points[painter.points.length - 1 ], p, lineRgba);
     painter.addPoint(p);
-    // painter.draw(p);
     painter.drawPoint(p, pointRgba);
-    // console.log(p);
-    // if (state == 0) {
-    //     state = -1;
-    // }
 }
 
 doKeyDown = function(e) {

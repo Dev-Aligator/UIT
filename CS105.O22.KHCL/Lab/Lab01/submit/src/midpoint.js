@@ -13,7 +13,7 @@ function MidPointPainter(context, width, height, imageData) {
     else {
         this.imageData = context.createImageData(width, height);
     }
-
+    
     this.getPixelIndex = function(x, y) {
         if (x < 0 || y < 0  || x > this.width || y > this.height)
             return -1;
