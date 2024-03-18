@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -57,6 +57,8 @@ body {
     justify-content: center;
     align-items: center;
     margin-left: 10px;
+    max-width: 180px;
+    max-height: 80px;
 }
 
 .option:hover {
@@ -115,4 +117,48 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
+}
+
+
+
+@media only screen and (max-width: 1200px) {
+    .container {
+        max-width: 800px;
+    }
+
+}
+
+@media only screen and (max-width: 1200px) {
+    .sidebar {
+        justify-content: flex-start;
+        align-items: flex-start;
+      }
+
+}
+
+@media only screen and (max-width: 600px) {
+    .heading .title {
+        font-size: 20px;
+    }
+
+    .heading .author {
+        font-size: 14px;
+    }
+
+    .sidebar {
+        justify-content: flex-end;
+        align-items: flex-end;
+        gap: unset;
+      }
+}
+
+@media only screen and (min-width: 1900px) {
+    .container {
+        max-width: 2000px;
+    }
+
+}
+
+.disabled {
+    display: none;
 }

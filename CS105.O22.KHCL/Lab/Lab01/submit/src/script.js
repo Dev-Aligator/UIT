@@ -2,8 +2,21 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 
-var width = 800;
-var height = 600;
+// var width = 1000;
+// var height = 800;
+
+
+var screenWidth = window.innerWidth;
+screenWidth = screenWidth > 2560 ? 2560 : screenWidth; /// Max value for screen width is 2560px
+
+
+// Determine the desired aspect ratio (e.g., 4:3)
+var aspectRatio = 5 / 3; // You can adjust this to your desired aspect ratio
+
+// Set the width based on the screen width
+var width = Math.round(screenWidth * 0.7); // Adjust as needed, here 80% of the screen width
+// Calculate the corresponding height based on the aspect ratio
+var height = Math.round(width / aspectRatio);
 
 var bgRgba = [240, 240, 200, 255];
 var pointRgba = [0, 0, 255, 255];
@@ -12,7 +25,7 @@ var vlineRgba = [255, 0, 0, 255];
 
 canvas.setAttribute("width", width);
 canvas.setAttribute("height", height);
-
+canvas.style.backgroundColor = bgRgba;
 var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height));
 var storedImageData;
 
@@ -34,8 +47,12 @@ document.querySelectorAll('.option').forEach(function(option) {
     option.addEventListener('click', function() {
         var painterType = this.classList[1]; // Extract the painter type from the class
         createPainter(painterType); // Create the corresponding painter
-        // Additional logic if needed, such as clearing canvas or resetting state
         // Remove the 'chosen' class from all options
+        if (painterType == "midpoint") {   /// Force to use points method when select Midpoint to draw circle
+            document.querySelector('.method.using_point').click();
+        }
+        changeVisible(document.querySelector('.method.without_point')); /// Conditionally hide or show the "without_point" option 
+        
         document.querySelectorAll('.option').forEach(function(opt) {
             opt.classList.remove('chosen');
         });
@@ -47,10 +64,9 @@ document.querySelectorAll('.option').forEach(function(option) {
 
 document.querySelectorAll('.method').forEach(function(method) {
     method.addEventListener('click', function() {
-        var selectedMethod = this.classList[1]; // Extract the painter type from the class
-        drawingMethod = selectedMethod; // Create the corresponding painter
+        var selectedMethod = this.classList[1]; // Extract the method type from the class
+        drawingMethod = selectedMethod; // Set the corresponding method
         painter.points = [];
-        // Additional logic if needed, such as clearing canvas or resetting state
         // Remove the 'chosen' class from all options
         document.querySelectorAll('.method').forEach(function(met) {
             met.classList.remove('chosen');
@@ -61,8 +77,14 @@ document.querySelectorAll('.method').forEach(function(method) {
     });
 });
 
-
-
+function changeVisible(element) {   //// This function check if midpoint is used then hide "without_point method"
+    if (element.classList.contains('disabled')) {
+        if (painter.type != "midpoint")
+        element.classList.remove('disabled'); // Remove the disabled class
+    } else if (painter.type == "midpoint") {
+        element.classList.add('disabled'); // Add the disabled class
+    }
+}
 
 
 var state = 0;
@@ -74,13 +96,8 @@ getPosOnCanvas = function(x, y){
             Math.floor(y - bbox.top * (canvas.height / bbox.height) + 0.5)];
 }
 
-// doMouseMove = function(e) {
-//     var p = getPosOnCanvas(e.clientX, e.clientY);
-//     painter.drawLine(painter.points[painter.points.length - 1], p, lineRgba);
-//     painter.addPoint(p);
-    
-// }
 
+// Implementing Drawing When Pressing The Mouse and Stop when releasing it
 
 var isMouseDown = false;
 
@@ -104,39 +121,39 @@ canvas.addEventListener('mouseup', function(e) {
     isMouseDown = false;
 });
 
+////
 
 
-
+/// Implementing Drawing Using Point - Click to Create Point then Use Points to Make Line, Circle
 doMouseDown = function(e) {
-    
-
-    if (e.button != 0 || drawingMethod == "without_point") {
+    if (e.button != 0 || drawingMethod == "without_point") { /// Only Left Button and When Drawing Method is set to "without_point"
         return;
     }
     
-    var p = getPosOnCanvas(e.clientX, e.clientY);
-    if (painter.type == "midpoint") {
-        if (painter.points.length == 0){
+    var p = getPosOnCanvas(e.clientX, e.clientY);   /// Get Mouse Position
+    if (painter.type == "midpoint") {               /// Draw Circle if painter type is MidPoint 
+        if (painter.points.length == 0){            /// Draw the center point then wait for the second point
             painter.addPoint(p);
             painter.drawPoint(p, pointRgba);
             return;
         }
         else{
-            painter.drawCircle(painter.points[0], p, lineRgba);
+            painter.drawCircle(painter.points[0], p, lineRgba);   /// When we have 2 points, draw the circle
             painter.points = [];
             return;
         }
         
     }
 
-    if (state == 0) {
-        state = 1;
+    //// Here we draw lines using DDA and Bresenham
+    if (state == 0) {  /// When there is only 1 point ( or after we pressed ESC ) 
+        state = 1;      
         painter.addPoint(p);
-        painter.drawPoint(p, pointRgba);
+        painter.drawPoint(p, pointRgba); // We draw that point, then wait for the next point before drawing a line
         return;
     }
 
-
+    /// When there is more than 1 points
     painter.drawLine(painter.points[painter.points.length - 1 ], p, lineRgba);
     painter.addPoint(p);
     painter.drawPoint(p, pointRgba);
@@ -145,16 +162,7 @@ doMouseDown = function(e) {
 doKeyDown = function(e) {
     var keyId = e.keyCode ? e.keyCode : e.which;
 
-    // if (keyId == 27 && state == 1) {
-    //     state = 2;
-    //     painter.draw(painter.points[painter.points.length - 1]);
-    // }
-
-    // if (keyId == 27 && state == -1) {
-    //     state = 0;
-    // }
-
-    if (keyId == 27) {
+    if (keyId == 27) { /// Press ESC to stop connect the lastet point to the new one - draw a new path
         state = 0;
     }
 }
