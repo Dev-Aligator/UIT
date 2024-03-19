@@ -10,11 +10,11 @@ var screenWidth = window.innerWidth;
 screenWidth = screenWidth > 2560 ? 2560 : screenWidth; /// Max value for screen width is 2560px
 
 
-// Determine the desired aspect ratio (e.g., 4:3)
-var aspectRatio = 5 / 3; // You can adjust this to your desired aspect ratio
+// Determine the desired aspect ratio (e.g., 5:3)
+var aspectRatio = 5 / 3;
 
 // Set the width based on the screen width
-var width = Math.round(screenWidth * 0.7); // Adjust as needed, here 80% of the screen width
+var width = Math.round(screenWidth * 0.7); // Adjust as needed, here 70% of the screen width
 // Calculate the corresponding height based on the aspect ratio
 var height = Math.round(width / aspectRatio);
 
@@ -23,18 +23,50 @@ var pointRgba = [0, 0, 255, 255];
 var lineRgba = [0, 0, 0, 255];
 var vlineRgba = [255, 0, 0, 255];
 
+var colorPicker = new Huebee('#colorPickerInput', {
+    notation: 'hex',
+    saturations: 2,
+    setText: true,
+    defaultColor: 'rgba(0, 0, 0, 1)'
+});
+
+
+
+colorPicker.on('change', function(color) {
+    // Convert the hex color to RGBA
+    var rgbaColor = hexToRgba(color);
+    // Update lineRgba
+    lineRgba = rgbaColor;
+});
+
+function hexToRgba(hex) {
+    // Remove the '#' if present
+    hex = hex.replace(/^#/, '');
+    // Parse the hexadecimal values
+    var bigint = parseInt(hex, 16);
+    // Extract the RGBA values
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    // Return the RGBA values as an array
+    return [r, g, b, 255];
+}
+
+
+
+
 canvas.setAttribute("width", width);
 canvas.setAttribute("height", height);
 canvas.style.backgroundColor = bgRgba;
 var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height));
 var storedImageData;
 var tempImageData;
-
+var notificationTimeout;
 var drawingMethod = "using_point";
 methodInstructionNotification(drawingMethod);
 
 function createPainter(painterType) {
-    storedImageData = context.getImageData(0, 0, width, height);
+    storedImageData = context.getImageData(0, 0, width, height); 
     if (painterType === 'dda') {
         painter = new DDAPainter(context, width, height, storedImageData);
     } else if (painterType === 'bresenham') {
@@ -123,7 +155,7 @@ canvas.addEventListener('mousemove', function(e) {
     }
 });
 
-canvas.addEventListener('mouseup', function(e) {
+window.addEventListener('mouseup', function(e) {
     isMouseDown = false;
 });
 
@@ -236,6 +268,7 @@ clearButton.addEventListener("click", function() {
     painter.imageData = context.createImageData(canvas.width, canvas.height);
 });
 
+
 window.addEventListener('resize', function() {
     // Call the showNotification function when a resize event is detected
     showNotification("Phát hiện bạn vừa resize cửa sổ, để có trải nghiệm tốt nhất hãy refresh lại trang web", 7000);
@@ -244,7 +277,7 @@ window.addEventListener('resize', function() {
 function methodInstructionNotification(method) {
     if(method == "using_point") {
         if (painter.type == "midpoint") {
-            showNotification("Để vẽ hình tròn, đầu tiên nhấp chuột để vẽ tâm, sau đó nhấp một lần nữa để chọn bán kính, ", 300000);
+            showNotification("Để vẽ hình tròn, đầu tiên nhấp chuột để vẽ tâm, sau đó nhấp một lần nữa để chọn bán kính, Nhấn ESC để hủy hình tròn hiện tại ", 300000);
         }
         else {
             showNotification("Để vẽ, hãy nhấp chuột để tạo điểm bắt đầu, sau đó di chuột để chọn điểm cuối - Nhấn ESC để hủy đường đang vẽ", 300000);
@@ -262,8 +295,13 @@ function showNotification(text, timeout=30000) {
     notification.innerHTML = text;
   
     // Hide the notification after 3 seconds (3000 milliseconds)
-    setTimeout(function() {
-      closeNotification();
+    if (notificationTimeout) {
+        clearTimeout(notificationTimeout);
+    }
+
+    // Set the timeout for the new notification
+    notificationTimeout = setTimeout(function() {
+        closeNotification();
     }, timeout);
   }
   

@@ -82,6 +82,14 @@ body {
     
   }
 
+
+
+#colorPickerInput {
+    max-width: 180px;
+    min-height: 40px;
+}
+
+
 .option:hover {
     background-color: #0056b3;
 }

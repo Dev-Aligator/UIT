@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <title DDA></title>
         <link href="style/main.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="https://unpkg.com/huebee@2/dist/huebee.min.css">
     </head>
 
     <body>
@@ -14,6 +15,10 @@
         <div class="sidebar">
             <div class="method using_point chosen">Vẽ dùng 2 điểm</div>
             <div class="method without_point">Vẽ tự do</div>
+            <div class="color_selection">
+                <input type="text" id="colorPickerInput" value="#000000">
+            </div>
+            
         </div>
         <div class="container">
             <div class="heading">
@@ -34,7 +39,7 @@
             <div class="buttions">
                 <button id="reset">Reset</button>
             </div>
-
+            <script src="https://unpkg.com/huebee@2/dist/huebee.pkgd.min.js"></script>
             <script type="text/javascript" src="src/dda.js"></script>
             <script type="text/javascript" src="src/bresenham.js"></script>
             <script type="text/javascript" src="src/midpoint.js"></script>
