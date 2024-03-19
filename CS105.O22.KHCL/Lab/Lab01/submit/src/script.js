@@ -2,11 +2,8 @@
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
 
-// var width = 1000;
-// var height = 800;
 
-
-var screenWidth = window.innerWidth;
+var screenWidth = window.innerWidth;   
 screenWidth = screenWidth > 2560 ? 2560 : screenWidth; /// Max value for screen width is 2560px
 
 
@@ -23,50 +20,20 @@ var pointRgba = [0, 0, 255, 255];
 var lineRgba = [0, 0, 0, 255];
 var vlineRgba = [255, 0, 0, 255];
 
-var colorPicker = new Huebee('#colorPickerInput', {
-    notation: 'hex',
-    saturations: 2,
-    setText: true,
-    defaultColor: 'rgba(0, 0, 0, 1)'
-});
-
-
-
-colorPicker.on('change', function(color) {
-    // Convert the hex color to RGBA
-    var rgbaColor = hexToRgba(color);
-    // Update lineRgba
-    lineRgba = rgbaColor;
-});
-
-function hexToRgba(hex) {
-    // Remove the '#' if present
-    hex = hex.replace(/^#/, '');
-    // Parse the hexadecimal values
-    var bigint = parseInt(hex, 16);
-    // Extract the RGBA values
-    var r = (bigint >> 16) & 255;
-    var g = (bigint >> 8) & 255;
-    var b = bigint & 255;
-    // Return the RGBA values as an array
-    return [r, g, b, 255];
-}
-
-
 
 
 canvas.setAttribute("width", width);
 canvas.setAttribute("height", height);
 canvas.style.backgroundColor = bgRgba;
-var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height));
-var storedImageData;
+var painter = new DDAPainter(context, width, height, context.getImageData(0, 0, width, height)); // set DDA as the default drawing algorithm
+var storedImageData;   
 var tempImageData;
 var notificationTimeout;
-var drawingMethod = "using_point";
-methodInstructionNotification(drawingMethod);
+var drawingMethod = "using_2_points"; 
+methodInstructionNotification(drawingMethod);   
 
-function createPainter(painterType) {
-    storedImageData = context.getImageData(0, 0, width, height); 
+function createPainter(painterType) {   /// Create painter corresponding to user's selection
+    storedImageData = context.getImageData(0, 0, width, height); // Save current image data
     if (painterType === 'dda') {
         painter = new DDAPainter(context, width, height, storedImageData);
     } else if (painterType === 'bresenham') {
@@ -82,10 +49,10 @@ document.querySelectorAll('.option').forEach(function(option) {
         var painterType = this.classList[1]; // Extract the painter type from the class
         createPainter(painterType); // Create the corresponding painter
         // Remove the 'chosen' class from all options
-        if (painterType == "midpoint") {   /// Force to use points method when select Midpoint to draw circle
-            document.querySelector('.method.using_point').click();
+        if (painterType == "midpoint") {   /// Force to use 2 points method when select Midpoint to draw circle
+            document.querySelector('.method.using_2_points').click();
         }
-        changeVisible(document.querySelector('.method.without_point')); /// Conditionally hide or show the "without_point" option 
+        changeVisible(document.querySelector('.method.using_many_points')); /// Conditionally hide or show the "using_many_points" option 
 
         methodInstructionNotification(drawingMethod); /// Display the instruction
         
@@ -102,20 +69,20 @@ document.querySelectorAll('.method').forEach(function(method) {
     method.addEventListener('click', function() {
         var selectedMethod = this.classList[1]; // Extract the method type from the class
         drawingMethod = selectedMethod; // Set the corresponding method
-        painter.points = [];
         // Remove the 'chosen' class from all options
         document.querySelectorAll('.method').forEach(function(met) {
             met.classList.remove('chosen');
         });
 
         methodInstructionNotification(drawingMethod); /// Display the instruction
-
+        terminateAction();                             // Terminate current action when switching to a new drawing style 
+        painter.points = []; 
         // Add the 'chosen' class to the clicked option
         this.classList.add('chosen');
     });
 });
 
-function changeVisible(element) {   //// This function check if midpoint is used then hide "without_point method"
+function changeVisible(element) {   //// This function check if midpoint is used then hide "using_many_points" method
     if (element.classList.contains('disabled')) {
         if (painter.type != "midpoint")
         element.classList.remove('disabled'); // Remove the disabled class
@@ -125,7 +92,7 @@ function changeVisible(element) {   //// This function check if midpoint is used
 }
 
 
-var state = 0;
+var state = 0;    // Initial state, when there is no point in the painter.points
 
 
 getPosOnCanvas = function(x, y){
@@ -134,50 +101,29 @@ getPosOnCanvas = function(x, y){
             Math.floor(y - bbox.top * (canvas.height / bbox.height) + 0.5)];
 }
 
-
-// Implementing Drawing When Pressing The Mouse and Stop when releasing it
-
-var isMouseDown = false;
-
-canvas.addEventListener('mousedown', function(e) {
-    isMouseDown = true;
-    if (drawingMethod == "without_point"){
-        var p = getPosOnCanvas(e.clientX, e.clientY);
-        painter.addPoint(p);
-    }
-});
-
-canvas.addEventListener('mousemove', function(e) {
-    if (isMouseDown && drawingMethod == "without_point") {
-        var p = getPosOnCanvas(e.clientX, e.clientY);
-        painter.drawLine(painter.points[painter.points.length - 1], p, lineRgba);
-        painter.addPoint(p);
-    }
-});
-
-window.addEventListener('mouseup', function(e) {
-    isMouseDown = false;
-});
-
-////
+copyImageData = function(imageData) {
+    return new ImageData(
+        new Uint8ClampedArray(imageData.data), width, height
+    )
+}
 
 
-/// Implementing Drawing Using Point - Click to Create Point then Use Points to Make Line, Circle
+
+
+/// Implementing Drawing Using 2 Points - Click to Create Starting Point then Select the Second Point
 doMouseDown = function(e) {
-    if (e.button != 0 || drawingMethod == "without_point") { /// Only Left Button and When Drawing Method is set to "without_point"
+    if (e.button != 0 || drawingMethod == "using_many_points") { /// Only Left Button and When Drawing Method is set to "using_2_points"
         return;
     }
     
     var p = getPosOnCanvas(e.clientX, e.clientY);   /// Get Mouse Position
+    
+    
     if (painter.type == "midpoint") {               /// Draw Circle if painter type is MidPoint 
         if (painter.points.length == 0){            /// Draw the center point then wait for the second point
             painter.addPoint(p);
             painter.drawPoint(p, pointRgba);
-            tempImageData = new ImageData(
-                new Uint8ClampedArray(painter.imageData.data),
-                painter.imageData.width,
-                painter.imageData.height
-            )
+            tempImageData = copyImageData(painter.imageData);      // Here, we save the imageData AFTER drawing the starting point
             canvas.addEventListener('mousemove', doMouseMoveDrawCircleV);
             state = 2;
             return;
@@ -193,63 +139,61 @@ doMouseDown = function(e) {
     }
 
     //// Here we draw lines using DDA and Bresenham
-    if (painter.points.length == 0) {
-        painter.addPoint(p);
-        painter.drawPoint(p, pointRgba);
-        tempImageData = new ImageData(
-            new Uint8ClampedArray(painter.imageData.data),
-            painter.imageData.width,
-            painter.imageData.height
-        )
+    if (painter.points.length == 0) {         // When there is no starting point
+        painter.addPoint(p);                 // Set this point as the starting point
+        painter.drawPoint(p, pointRgba);     // Draw this point
+
+
+        /* Here, we save the imageData AFTER drawing the starting point
+           Then, wherever the mouse goes, we draw a virtual line
+          But before draw the current virtual line, we need to erase the
+          old one, so we restore the imageData when we draw starting point */
+                      
+        tempImageData = copyImageData(painter.imageData);                                     
         canvas.addEventListener('mousemove', doMouseMoveDrawV);
-        state = 2;
+        state = 2;                                                 // State = 2 - We repeatedly draw a virtual line then wait for user to select the end point
     }   
-    else {
-        painter.drawLine(painter.points[painter.points.length-1], p , lineRgba);
-        painter.drawPoint(p, pointRgba);
-        painter.points = [];
-        canvas.removeEventListener('mousemove', doMouseMoveDrawV);
-        state = 1;
+    else {                                  // Here is when user select the end point 
+        painter.drawLine(painter.points[0], p , lineRgba);      // Draw a line from the starting point to the selected point 
+        painter.drawPoint(p, pointRgba);                       // Draw the selected point
+        painter.points = [];                                    // Set the painter.points to empty ( Waiting for the next starting point for a new line)
+        canvas.removeEventListener('mousemove', doMouseMoveDrawV);  
+        state = 1;                                             // Set the state back to 1
     }
 }
 
-function doMouseMoveDrawV(e) {
-    if (state != 2 || painter.type == "midpoint") return;
-    painter.imageData = new ImageData(
-        new Uint8ClampedArray(tempImageData.data),
-        tempImageData.width,
-        tempImageData.height
-    );
+function doMouseMoveDrawV(e) {                              // This function is used to draw virtual lines
+    if (state != 2 || painter.type == "midpoint") return;   // Only works if state = 2 and painter.type is either DDA or Bresenham
+    painter.imageData = copyImageData(tempImageData);                     // Restore the old imageData ( after draw the starting point )
     let v_point = getPosOnCanvas(e.clientX, e.clientY);
-    painter.drawLine(painter.points[0], v_point, vlineRgba);
+    painter.drawLine(painter.points[0], v_point, vlineRgba);  // Draw a virtual line
 }
 
-function doMouseMoveDrawCircleV(e) {
-    if (state != 2 || painter.type != "midpoint" ) return;
-    painter.imageData = new ImageData(
-        new Uint8ClampedArray(tempImageData.data),
-        tempImageData.width,
-        tempImageData.height
-    );
+function doMouseMoveDrawCircleV(e) {                        // This function is used to draw virtual circles
+    if (state != 2 || painter.type != "midpoint" ) return;  // Only works if state = 2 and painter.type is MidPoint
+    painter.imageData = copyImageData(tempImageData);                   // Same as before
     let v_point = getPosOnCanvas(e.clientX, e.clientY);
-    painter.drawCircle(painter.points[0], v_point, vlineRgba);
+    painter.drawCircle(painter.points[0], v_point, vlineRgba); // Draw a virtual circle
 }
 
-doKeyDown = function(e) {
-    var keyId = e.keyCode ? e.keyCode : e.which;
+doKeyDown = function(e) {                                 // This function is used to Terminate a drawing action
+    var keyId = e.keyCode ? e.keyCode : e.which;          
 
-    if (keyId == 27 && state == 2) { /// Press ESC to stop connect the lastet point to the new one - draw a new path
-        state = 0;
-        painter.imageData = new ImageData(
-            new Uint8ClampedArray(tempImageData.data),
-            tempImageData.width,
-            tempImageData.height
-        );
-        painter.context.putImageData(painter.imageData, 0,0);
-        painter.drawPoint(painter.points[0], bgRgba);
-        painter.points = [];
+    if (keyId == 27) {                     // KeyId = 27 --> ESC
+        terminateAction();
     }
 }
+
+terminateAction = function() {
+    if (state == 2) {
+        state = 0; 
+        painter.imageData = copyImageData(tempImageData)   // Restore the old imageData ( after draw the starting point )
+        painter.context.putImageData(painter.imageData, 0,0);   
+        painter.drawPoint(painter.points[0], bgRgba);      // Fill the starting point with blank space
+        painter.points = []; 
+    }
+}
+
 // canvas.addEventListener('mousemove', doMouseMoveDrawV);
 // canvas.addEventListener('mousemove', doMouseMoveDrawCircleV);
 canvas.addEventListener('mousedown', doMouseDown);
@@ -269,13 +213,18 @@ clearButton.addEventListener("click", function() {
 });
 
 
+
+
+//// From here We implement unnecessary functions, you can ignore them
+
+
 window.addEventListener('resize', function() {
     // Call the showNotification function when a resize event is detected
     showNotification("Phát hiện bạn vừa resize cửa sổ, để có trải nghiệm tốt nhất hãy refresh lại trang web", 7000);
   });
   
 function methodInstructionNotification(method) {
-    if(method == "using_point") {
+    if(method == "using_2_points") {
         if (painter.type == "midpoint") {
             showNotification("Để vẽ hình tròn, đầu tiên nhấp chuột để vẽ tâm, sau đó nhấp một lần nữa để chọn bán kính, Nhấn ESC để hủy hình tròn hiện tại ", 300000);
         }
@@ -284,7 +233,7 @@ function methodInstructionNotification(method) {
         }
     }
 
-    if(method == "without_point") {
+    if(method == "using_many_points") {
         showNotification("Đè chuột trái và di chuột để vẽ, thả chuột để dừng vẽ", 300000);
     }
 }
@@ -310,3 +259,61 @@ function showNotification(text, timeout=30000) {
     notification.style.display = 'none';
   }
   
+  var colorPicker = new Huebee('#colorPickerInput', {
+    notation: 'hex',
+    saturations: 2,
+    setText: true,
+    defaultColor: 'rgba(0, 0, 0, 1)'
+});
+
+// Implementing Drawing When Pressing The Mouse and Stop when releasing it
+// Additional drawing style, Can only draw lines, When drawing circles using midpoint, We disable this style
+
+// ONLY IF drawingMethod == "using_many_points"
+var isMouseDown = false;
+
+canvas.addEventListener('mousedown', function(e) {
+    isMouseDown = true;
+    if (drawingMethod == "using_many_points"){
+        var p = getPosOnCanvas(e.clientX, e.clientY);
+        painter.addPoint(p);
+    }
+});
+
+canvas.addEventListener('mousemove', function(e) {
+    if (isMouseDown && drawingMethod == "using_many_points") {
+        var p = getPosOnCanvas(e.clientX, e.clientY);
+        painter.drawLine(painter.points[painter.points.length - 1], p, lineRgba);
+        painter.addPoint(p);
+    }
+});
+
+window.addEventListener('mouseup', function(e) {
+    isMouseDown = false;
+});
+
+//
+
+
+
+colorPicker.on('change', function(color) {
+    // Convert the hex color to RGBA
+    var rgbaColor = hexToRgba(color);
+    // Update lineRgba
+    lineRgba = rgbaColor;
+});
+
+function hexToRgba(hex) {
+    // Remove the '#' if present
+    hex = hex.replace(/^#/, '');
+    // Parse the hexadecimal values
+    var bigint = parseInt(hex, 16);
+    // Extract the RGBA values
+    var r = (bigint >> 16) & 255;
+    var g = (bigint >> 8) & 255;
+    var b = bigint & 255;
+    // Return the RGBA values as an array
+    return [r, g, b, 255];
+}
+
+
