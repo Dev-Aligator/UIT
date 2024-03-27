@@ -4,7 +4,7 @@ import numpy as np
 import heapq
 import time
 import numpy as np
-from heuristics import heuristic_displaced, heuristic_distance, heuristic_alternate
+from heuristics import heuristic_displaced, heuristic_distance, heuristic_alternate, resetCache
 import csv 
 global posWalls, posGoals
 class PriorityQueue:
@@ -14,13 +14,13 @@ class PriorityQueue:
         self.Count = 0
         self.len = 0
 
-    def push(self, item, priority):
-        entry = (priority, self.Count, item)
+    def push(self, item, priority, tie_breaker = 30):
+        entry = (priority, tie_breaker, self.Count, item)
         heapq.heappush(self.Heap, entry)
         self.Count += 1
 
     def pop(self):
-        (_, _, item) = heapq.heappop(self.Heap)
+        (_, _, _, item) = heapq.heappop(self.Heap)
         return item
 
     def isEmpty(self):
@@ -210,7 +210,7 @@ def cost(actions):
     return len([x for x in actions if x.islower()])
 
 
-def heuristic_function(posPlayer, posBox, posWalls, weight = 1, function="alternate"):
+def heuristic_function(posPlayer, posBox, posWalls, weight = 0.8, function="alternate"):
     # posBox = PosOfBoxes(gameState)
     if function == "displayed":
         return heuristic_displaced(posBox, posGoals)
@@ -225,7 +225,7 @@ def uniformCostSearch(gameState):
     """Implement uniformCostSearch approach"""
     beginBox = PosOfBoxes(gameState)
     beginPlayer = PosOfPlayer(gameState)
-
+    count = 0
     startState = (beginPlayer, beginBox)
     frontier = PriorityQueue()
     frontier.push([startState], 0)
@@ -238,7 +238,7 @@ def uniformCostSearch(gameState):
     while not frontier.isEmpty():
         # Dequeue the state with the lowest cost from frontier
         node = frontier.pop()
-
+        count += 1
         # Dequeue the corresponding sequence of actions
         node_action = actions.pop()
 
@@ -261,7 +261,7 @@ def uniformCostSearch(gameState):
 
                 # Enqueue the new action sequence with its cost into actions
                 actions.push(new_node_action, action_cost)
-    return temp
+    return temp, count
 
 
 def greedySearch(gameState):
@@ -309,6 +309,7 @@ def aStarSearch(gameState):
     beginBox = PosOfBoxes(gameState)
     beginPlayer = PosOfPlayer(gameState)
     wallPos = PosOfWalls(gameState)
+    resetCache()
     temp = []
     start_state = (beginPlayer, beginBox)
     frontier = PriorityQueue()
@@ -338,16 +339,38 @@ def aStarSearch(gameState):
 
                 # Calculate the combined value (f-value) for the new state
                 f_value = heuristic_value + action_cost
+                
+                tie_breaker = 30
+                if action[-1].islower():
+                    tie_breaker = manhattan_distance(newPosPlayer, getMeanBox(newPosBox))
 
                 # Enqueue the new state with its combined value into the frontier
-                frontier.push(node + [(newPosPlayer, newPosBox)], f_value)
+                frontier.push(node + [(newPosPlayer, newPosBox)], f_value, tie_breaker)
 
                 # Enqueue the new action sequence with its combined value into actions
-                actions.push(current_node_action, f_value)
+                actions.push(current_node_action, f_value, tie_breaker)
 
     # end =  time.time()
 
     return temp, count
+
+
+def manhattan_distance(posA, posB):
+    return abs(posA[0] - posB[0]) + abs(posA[1] - posB[1])
+def getMeanBox(posBox):
+    global prev_box_state
+    global prev_value
+    try:
+        if prev_box_state == posBox:
+            return prev_value
+        prev_box_state = posBox
+    except:
+        prev_box_state = posBox
+    n = len(posBox)
+    mean_x = sum(box[0] for box in posBox) / n
+    mean_y = sum(box[1] for box in posBox) / n
+    prev_value = (mean_x, mean_y)
+    return prev_value
 
 
 """Read command"""
@@ -398,6 +421,7 @@ def get_move(layout, player_pos, method):
     else:
         raise ValueError('Invalid method.')
     time_end=time.time()
+    # return ['r', 'd', 'd', 'L', 'r', 'u', 'u', 'l', 'D', 'l', 'D', 'D', 'D', 'r', 'd', 'L', 'L', 'd', 'l', 'l', 'u', 'R', 'u', 'R', 'l', 'd', 'd', 'r', 'U', 'r', 'U', 'U', 'U', 'l', 'u', 'R', 'R', 'R', 'd', 'L', 'u', 'l', 'D', 'D', 'D', 'r', 'd', 'L', 'L', 'd', 'l', 'l', 'u', 'R', 'u', 'R', 'l', 'd', 'd', 'r', 'U', 'r', 'U', 'U', 'U', 'l', 'u', 'R', 'd', 'd', 'd', 'd', 'l', 'l', 'u', 'R', 'd', 'r', 'U', 'U', 'U', 'r', 'r', 'u', 'u', 'l', 'D']
     print('Runtime of %s: %.2f second.' %(method, time_end-time_start))
     print('Number of Moves: ', len(result[0]))
     print(result[0])

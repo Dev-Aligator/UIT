@@ -2,7 +2,6 @@ import numpy as np
 
 
 # SOKOBAN HEURISTICS
-
 def heuristic_displaced(posBox, posGoals):
     countTargetNotFilled = 0
     for box in posBox:
@@ -21,7 +20,7 @@ def heuristic_distance(posBox, posGoals):
         distance += (abs(sortposBox[i][0] - sortposGoals[i][0])) + (abs(sortposBox[i][1] - sortposGoals[i][1]))
     return distance
 
-
+personal_space_cache = {}
 def heuristic_alternate(posBox, posGoals, PosOfWalls):
     global prev_boxes
     global prev_heuristic
@@ -56,9 +55,16 @@ def heuristic_alternate(posBox, posGoals, PosOfWalls):
     prev_heuristic = sum_distance  # Update prev_heuristic
     return sum_distance
 
+def resetCache():
+    global personal_space_cache
+    personal_space_cache = {}
 
 def personalSpace(box, obstacles):
-  '''Check if any of the 8 neighboring tiles to the box have an obstacle, if they do increase the cost by number of obstacles in this space
-  Inspired by looking at the difficult problems 30-39'''
-  personal_space = ((box[0], box[1]+1), (box[0]+1, box[1]), (box[0]-1, box[1]), (box[0], box[1]-1),(box[0]-1, box[1]-1),(box[0]+1, box[1]+1),(box[0]+1, box[1]-1), (box[0]-1, box[1]+1))
-  return len(set(personal_space)&set(obstacles)) 
+    '''Check if any of the 8 neighboring tiles to the box have an obstacle, if they do increase the cost by number of obstacles in this space
+    Inspired by looking at the difficult problems 30-39'''
+    global personal_space_cache
+    if box not in personal_space_cache:
+        personal_space = ((box[0], box[1]+1), (box[0]+1, box[1]), (box[0]-1, box[1]), (box[0], box[1]-1),(box[0]-1, box[1]-1),(box[0]+1, box[1]+1),(box[0]+1, box[1]-1), (box[0]-1, box[1]+1))
+        personal_space_val = len(set(personal_space) & set(obstacles))
+        personal_space_cache[box] = personal_space_val
+    return personal_space_cache[box]
