@@ -99,11 +99,11 @@ def heuristic_distance(posBox, posGoals):
   \end{itemize}
 \text{\Huge $\Rightarrow$} Ta sẽ thiết kế một heuristics tốt hơn để giải quyết những hạn chế này \\
 
-\hspace{-1em}\textbf{2. Manhattan Distance with PosPlayer and Obtacles} \\
+\hspace{-1em}\textbf{2. Nearest Manhattan Distance with PosPlayer and Obtacles} \\
 
 Hãy cùng nhau giải quyết từng vấn đề một
 \begin{itemize}
-	\item Bắt cặp box với goal gần nhất: \\
+	\item \textbf{Bắt cặp box với goal gần nhau nhất}: \\
 	Duyệt qua danh sách boxes và goals chưa được filled, lần lượt tính khoảng cách giữa chúng, chọn ra khoảng cách nhỏ nhất, sau đó loại cặp (box, goal) này ra. Lặp lại quá trình, ta sẽ nhận được các cặp box và goal gần nhất tương ứng.
 \begin{tcolorbox}[boxrule=0.5pt, colback=white]
   \begin{lstlisting}[language=python, numbers=none, basicstyle=\ttfamily\footnotesize]
@@ -124,7 +124,7 @@ for box in sortposBox:
   \end{lstlisting}
   \end{tcolorbox}
 
-  \item Xét đến yếu tố địa hình ( PosOfWalls, Obtacles ): \\
+  \item \textbf{Xét đến yếu tố địa hình ( PosOfWalls )} \\
   Khoảng cách Manhattan có thể bị sai lệch do đường đi bị chặn bởi tường hay một box, do đó ta sẽ sử dụng hàm thêm personalSpace được định nghĩa như sau:
   \begin{tcolorbox}[boxrule=0.5pt, colback=white]
 	\begin{lstlisting}[language=python, numbers=none, basicstyle=\ttfamily\footnotesize]
@@ -136,7 +136,7 @@ def personalSpace(box, obstacles):
 	\end{tcolorbox}
 	Sau mỗi lần tính khoảng cách gần nhất giữa một box và goal, ta cộng thêm giá trị của personalSpace(box) tương ứng.
 
-	\item Xét đến vị trí của Player (PosOfPlayer): \\
+	\item \textbf{Xét đến vị trí của Player (PosOfPlayer)}: \\
 	Trường hợp ta bỏ qua vị trí của Player trong heuristics, thì các hành động không phải đẩy box ( Vị trí các boxes không thay đổi so với state trước ), thì heuricstic sẽ giữ nguyên và nếu cả 4 hướng đều không đẩy box thì 4 hướng đều có cùng một giá trị heuristics. Dẫn đến việc mở các node không cần thiết, thay vào đó các hành động đi hướng đến các cụm boxes nên được ưu tiên hơn. \\
 
 	Ở đây ta sẽ không thêm trực tiếp vào hàm heuristics hiện tại mà sẽ điều chỉnh CTDL PriorityQueue để thêm một \textbf{tie-breaker} value. Khi 2 hoặc nhiều actions có cùng một f-value ( heuristics + cost) thì ta sẽ dùng giá trị này để quyết định node nào nên được mở.
@@ -168,11 +168,11 @@ def getCenTroidBox(posBox):
 		\end{lstlisting}
 	\end{tcolorbox}
 
-	\item Hạn chế việc tính toán lại heuristics không thay đổi: \\
+	\item \textbf{Hạn chế tính toán lại heuristics không thay đổi}: \\
 	Như đã nói ở trên, các hành động không phải đẩy boxes thì heuristics sẽ giữ nguyên. Do đó ta sẽ dùng một biến để lưu giá trị heuristics trước đó, nếu PosBox ở state trước và state hiện tại không đổi, ta đơn giản trả về heuristics đã lưu mà không phải tính toán lại.
 	
-	\item Scale Heuristics: \\
-	Do heuristics mới được thiết kế có thêm nhiều yếu tố, nên ta cần scale lại trước khi cộng với cost để tính f-value. Ta sẽ nhân heuristics với trọng số w (Thông qua thực nhiệm, w=0.8 cho kết quả tốt nhất)
+	\item \textbf{Scale Heuristics}: \\
+	Do heuristics mới được thiết kế có thêm nhiều yếu tố, nên ta cần scale lại trước khi cộng với cost để tính f-value. Ta sẽ nhân heuristics với trọng số w (Thông qua thực nhiệm, w=0.8 cho kết quả tốt nhất - cân bằng giữa thời gian và lời giải tìm đươc)
 	{\large
 	\begin{equation}
 		f\_value = w*heuristics + cost
@@ -316,10 +316,11 @@ Ta thấy, tuy rằng có quá trình tính toán phức tạp hơn hẳn bản 
 	17 & \cellcolor{green!25}0 & \cellcolor{green!25}0 & \cellcolor{green!25}0 \\ \hline
 	\end{tcolorbox}
 \label{tab:model_performance}
+\vspace{-1.5em}
 \begin{flushleft}
-	Note: Ô màu xanh nghĩa là lời giải tối ưu
+	\textbf{Note: Ô được tô màu nghĩa là lời giải tối ưu cho level tương ứng}
 \end{flushleft}
-Ta thấy, Heuristics Upgrade luôn tìm ra thời giải tốt hơn hàm Heuristics cơ bản, tìm được 14/17 lời giải tối ưu cho các levels, trong khi con số này của hàm Heuristics cũ là 13/17. UCS trong trường hợp này, lời giải tìm được toàn bộ là lời giải tối ưu. Trường hợp duy nhất Heuristics cũ thể hiện tốt hơn Heuristics Upgrade là ở level 15 (107 so với 105). Trong tất cả trường hợp còn lại Heuristics Upgrade luôn tốt hơn.
+Ta thấy, Heuristics Upgrade luôn tìm ra thời giải tốt hơn hàm Heuristics cơ bản, tìm được 15/17 lời giải tối ưu cho các levels, trong khi con số này của hàm Heuristics cũ là 14/17. UCS trong trường hợp này, lời giải tìm được toàn bộ là lời giải tối ưu. Trường hợp duy nhất Heuristics cũ thể hiện tốt hơn Heuristics Upgrade là ở level 15 (107 so với 105). Trong tất cả trường hợp còn lại Heuristics Upgrade luôn tốt hơn.
 
 \begin{figure}[h]
 	\hspace{-3em}\includegraphics[scale=0.50]{NumberOfMoves.png}
