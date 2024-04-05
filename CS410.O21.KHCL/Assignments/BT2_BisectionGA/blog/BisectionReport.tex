@@ -1,0 +1,148 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{xy}
+
+\usepackage{amsmath,amsthm,amssymb,color,latexsym}
+\usepackage{geometry}        
+\geometry{letterpaper}    
+\usepackage{graphicx}
+\usepackage[utf8]{vietnam}
+\newtheorem{problem}{Problem}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{verbatim}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\tcbuselibrary{skins}
+\definecolor{Salmon}{RGB}{235,235,235}
+
+\newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\definecolor{blockbackgroundcolor}{RGB}{235,235,235}
+\definecolor{blockbordercolor}{RGB}{79,79,79}
+\newenvironment{solution}[1][\it{Answer}]{\textbf{#1. } }{}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\tcbset{tab1/.style={fonttitle=\bfseries\large,fontupper=\normalsize\sffamily,
+colback=yellow!10!white,colframe=red!75!black,colbacktitle=Salmon!40!white,
+coltitle=black,center title,freelance,frame code={
+\foreach \n in {north east,north west,south east,south west}
+{\path [fill=red!75!black] (interior.\n) circle (3mm); };},}}
+
+\tcbset{tab2/.style={enhanced,fonttitle=\bfseries,fontupper=\normalsize\sffamily,
+colback=yellow!10!white,colframe=red!50!black,colbacktitle=Salmon!40!white,
+coltitle=black,center title}}
+
+\begin{document}
+\graphicspath{ {Figs/} } 
+
+\noindent Mạng Neural và Giải thuật di truyền - CS410.O21.KHCL \hfill Bisection \\
+Nguyễn Hoàng Tân - 21521413
+
+\hrulefill
+
+
+\begin{problem}
+	Onemax
+\end{problem}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{Onemax_MRPS.png}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{Onemax_Evaluations.png}
+\end{minipage}
+\begin{tcolorbox}[tab2,tabularx={X||Y|Y|Y|Y},title=Comparison of GA-1X and GA-UX on Onemax,boxrule=0.5pt]
+	\textbf{Problem size} & \multicolumn{2}{c|}{GA-1X} & \multicolumn{2}{c}{GA-UX} \\
+	\hline
+	 & MRPS & \# Evaluations & MRPS & \# Evaluations \\
+	\hline
+	10 & 34.2 (5.01) & 273.72 (29.19) & \cellcolor{blue!25} 23.6 (4.8) &  \cellcolor{blue!25} 175.92 (30.52) \\
+	20 & 88 (15.18) & 1059 (176) & \cellcolor{blue!25} 44 (6.93) & \cellcolor{blue!25} 456.4 (71.03) \\
+	40 & 304 (70.11) & 5427.6 (1171.8) & \cellcolor{blue!25} 68.8 (7.96) & \cellcolor{blue!25} 1027.8 (119.31) \\
+	80 & 1228.8 (303.98) & 31648 (6610.26) & \cellcolor{blue!25} 146.4 (28.86) & \cellcolor{blue!25} 2998 (548) \\
+	160 & 4121.6 (821.2) & 160414 (29037) & \cellcolor{blue!25} 248 (26.05) & \cellcolor{blue!25} 7212.5 (690.15) \\
+\end{tcolorbox}
+
+
+\newpage
+\begin{problem}
+	LeadingOnes
+\end{problem}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{LeadingOnes_MRPS.png}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{LeadingOnes_Evaluations.png}
+\end{minipage}
+\begin{tcolorbox}[tab2,tabularx={X||Y|Y|Y|Y},title=Comparison of GA-1X and GA-UX on LeadingOnes,boxrule=0.5pt]
+    \textbf{Problem size} & \multicolumn{2}{c|}{GA-1X} & \multicolumn{2}{c}{GA-UX} \\
+    \hline
+     & MRPS & \# Evaluations & MRPS & \# Evaluations \\
+    \hline
+    10 & 122.4 (18.26) & 1141 (231.74) & \cellcolor{blue!25} 74.8 (11.6) &  \cellcolor{blue!25} 645.92 (102.42) \\
+    20 & 630.4 (162.57) &  10627.2 (2464) & \cellcolor{blue!25} 288 (78.06) & \cellcolor{blue!25} 4245 (1075.31) \\
+    40 & 4172.8 (606.35) &  139581 (17752) & \cellcolor{blue!25} 972.8 (98.32) & \cellcolor{blue!25} 26872 (2399) \\
+    80 & - & - & 3788.8 (570.14) & 191897 (27353) \\
+\end{tcolorbox}
+
+\newpage
+\begin{problem}
+	Concaternated Trap - 5
+\end{problem}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{Trap_MRPS.png}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\includegraphics*[scale=0.5]{Trap_Evaluations.png}
+\end{minipage}
+\begin{tcolorbox}[tab2,tabularx={X||Y|Y|Y|Y},title=Comparison of GA-1X and GA-UX on Concaternated Trap-5,boxrule=0.5pt]
+    \textbf{Problem size} & \multicolumn{2}{c|}{GA-1X} & \multicolumn{2}{c}{GA-UX} \\
+    \hline
+     & MRPS & \# Evaluations & MRPS & \# Evaluations \\
+    \hline
+    10 &  \cellcolor{blue!25} 126.4 (25.5) &  \cellcolor{blue!25} 1060.6 (217.2) & 441.6 (130.22) &  4946.6 (1558.2) \\
+    20 &  \cellcolor{blue!25} 360 (79.44) &   \cellcolor{blue!25} 4704.6 (977.2) &4326.4 (852.52) & 97868.8 (19286) \\
+    40 &  1177.6 (305.86) &   22202.9 (5295) & - & - \\
+    80 &   4505.6 (992.8) &  124925 (25084) & - & - \\
+\end{tcolorbox}
+
+
+
+\begin{problem}
+	Nhận xét, Ý kiến
+\end{problem}
+\hspace{-1em}\textbf{1. OneMax:} \\
+GA-UX có hiệu suất tốt hơn GA-1X ở mọi kích thước bài toán,  thể hiện qua MRPS và số lần gọi hàm evaluations. 
+
+\hspace{-1em}\textbf{2. LeadingOnes:} \\
+GA-UX có xu hướng hoạt động tốt hơn GA-1X ở mọi kích thước bài toán, tốt hơn cả về MRPS và số lần gọi evaluations. 
+
+\hspace{-1em}\textbf{3. Concaternated Trap-5:} \\
+Trường hợp duy nhất GA-1X cho kết quả tốt hơn GA-UX, Điều này có thể do cấu trúc của bài toán Trap phù hợp hơn với phép lai ghép mà GA-1X sử dụng.
+
+\end{document}
