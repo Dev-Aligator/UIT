@@ -1,0 +1,215 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[all]{xy}
+
+\usepackage{amsmath,amsthm,amssymb,color,latexsym}
+\usepackage{geometry}        
+\geometry{letterpaper}    
+\usepackage{graphicx}
+\usepackage[utf8]{vietnam}
+\newtheorem{problem}{Problem}
+\usepackage{listings}
+\usepackage{tcolorbox}
+\usepackage{verbatim}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{pgffor}
+\usepackage{float}
+\usepackage{hyperref}
+\tcbuselibrary{skins}
+\definecolor{Salmon}{RGB}{235,235,235}
+
+\newcolumntype{Y}{>{\raggedleft\arraybackslash}X}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\definecolor{blockbackgroundcolor}{RGB}{235,235,235}
+\definecolor{blockbordercolor}{RGB}{79,79,79}
+\newenvironment{solution}[1][\it{Answer}]{\textbf{#1. } }{}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\tcbset{tab1/.style={fonttitle=\bfseries\large,fontupper=\normalsize\sffamily,
+colback=yellow!10!white,colframe=red!75!black,colbacktitle=Salmon!40!white,
+coltitle=black,center title,freelance,frame code={
+\foreach \n in {north east,north west,south east,south west}
+{\path [fill=red!75!black] (interior.\n) circle (3mm); };},}}
+
+\tcbset{tab2/.style={enhanced,fonttitle=\bfseries,fontupper=\normalsize\sffamily,
+colback=yellow!10!white,colframe=red!50!black,colbacktitle=Salmon!40!white,
+coltitle=black,center title}}
+
+\begin{document}
+\graphicspath{ {Figs/} } 
+
+\noindent Mạng Neural và Giải thuật di truyền - CS410.O21.KHCL \hfill DE \& CEM \\
+Nguyễn Hoàng Tân - 21521413
+
+\hrulefill
+
+
+\begin{problem}
+	Lập bảng thống kê kết quả thí nghiệm cho mỗi tổ hợp
+\end{problem}
+
+% \hspace{-1em}\textbf{Sphere  (dim = 2):} \\
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Sphere on 2 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 0.0 (0.0)  & 0.000255 (0.000232)   \\
+    32 &  \cellcolor{blue!25} 0.0 (0.0)  & 9.170e-05 (9.159e-05) \\
+    64 &  \cellcolor{blue!25} 0.0 (0.0)  & 4.224e-05 (4.199e-05) \\
+    128 & \cellcolor{blue!25} 2.150e-36 (1.427e-36)  & 1.941e-05 (2.322e-05) \\
+    256 &  \cellcolor{blue!25} 1.345e-16 (1.398e-16)  & 4.612e-06 (4.150e-06) \\
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Sphere on 10 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 6.671e-14 (2.001e-13)  & 0.122 (0.059)   \\
+    32 &  \cellcolor{blue!25} 0.0 (0.0)  & 0.019 (0.005) \\
+    64 &  \cellcolor{blue!25} 0.0 (0.0)  & 0.012 (0.003) \\
+    128 & \cellcolor{blue!25} 8.356e-38 (1.175e-37)  & 0.006 (0.002) \\
+    256 &  \cellcolor{blue!25} 1.079e-17 (8.066e-18)  & 0.004 (0.001) \\
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Griewank on 2 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 0.003 (0.003)  & 9.381e-05 (0.000105)   \\
+    32 &  \cellcolor{blue!25} 0.002 (0.003)  & 3.576e-05 (1.940e-05) \\
+    64 &  \cellcolor{blue!25} 0.0 (0.0)  & 1.208e-05 (8.551e-06) \\
+    128 & \cellcolor{blue!25} 0.008 (0.001)  & 1.053e-05 (1.317e-05) \\
+    256 &  \cellcolor{blue!25} 0.223 (0.053)  & 2.503e-06 (2.236e-06) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Griewank on 10 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 0.003 (0.004)  & 0.014 (0.008)   \\
+    32 &  \cellcolor{blue!25} 0.001 (0.003)  & 0.002 (0.001) \\
+    64 &  \cellcolor{blue!25} 0.0 (0.0)  & 0.001 (0.000) \\
+    128 & \cellcolor{blue!25} 0.004 (0.005)  & 0.001 (0.000) \\
+    256 &  \cellcolor{blue!25} 0.098 (0.046)  & 0.001 (0.000) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Rosenbrock on 2 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 0.168 (0.342)  & 0.237 (0.451)   \\
+    32 &  \cellcolor{blue!25} 0.0 (0.0)  & 0.023 (0.024) \\
+    64 &  \cellcolor{blue!25} 0.001 (0.004)  & 0.002 (0.002) \\
+    128 & \cellcolor{blue!25} 0.457 (0.916)  & 0.001 (0.000) \\
+    256 &  \cellcolor{blue!25} 21.307 (10.625)  & 0.000 (0.000) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Rosenbrock on 10 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 4.997 (2.536)  & 22.105 (5.623)   \\
+    32 &  \cellcolor{blue!25} 20.280 (22.786)  & 7.415 (1.650) \\
+    64 &  \cellcolor{blue!25} 49.190 (31.480)  & 4.241 (1.613) \\
+    128 & \cellcolor{blue!25} 77.162 (8.465)  & 2.695 (1.112) \\
+    256 &  \cellcolor{blue!25} 101.630 (18.564)  & 1.740 (1.573) \\
+\end{tcolorbox}
+
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Michalewicz on 2 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} -1.801 (0.0)  & -1.734 (0.176)   \\
+    32 &  \cellcolor{blue!25} -1.801 (0.0)  & -1.799 (0.002) \\
+    64 &  \cellcolor{blue!25} -1.801 (0.0)  & -1.801 (0.000) \\
+    128 & \cellcolor{blue!25} -1.801 (0.0)  & -1.801 (0.001) \\
+    256 &  \cellcolor{blue!25} -1.801 (0.0)  & -1.801 (0.000) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Michalewicz on 10 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} -9.577 (0.056)  & -2.483 (0.644)   \\
+    32 &  \cellcolor{blue!25} -9.655 (0.012)  & -4.068 (0.929) \\
+    64 &  \cellcolor{blue!25} -9.660 (0.0)  & -7.199 (0.685) \\
+    128 & \cellcolor{blue!25} -9.660 (0.0)  & -8.039 (0.267) \\
+    256 &  \cellcolor{blue!25} -9.660 (0.0)  & -8.127 (0.245) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Ackley on 2 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 9.537e-07 (0.0)  & 0.056 (0.039)   \\
+    32 &  \cellcolor{blue!25} 9.537e-07 (0.0)  & 0.026 (0.017) \\
+    64 &  \cellcolor{blue!25} 9.537e-07 (0.0)  & 0.014 (0.010) \\
+    128 & \cellcolor{blue!25} 9.537e-07 (0.0)  & 0.013 (0.009) \\
+    256 &  \cellcolor{blue!25} 5.150e-06 (1.144e-06)  & 0.006 (0.003) \\
+\end{tcolorbox}
+
+\begin{tcolorbox}[tab2,tabularx={p{3cm}||Y|Y|},title=Ackley on 10 Dimensions,boxrule=0.5pt]
+    \textbf{Popsize N} & {DE} & {CEM} \\
+    \hline
+    16 & \cellcolor{blue!25} 0.116 (0.347)  & 0.949 (0.335)   \\
+    32 &  \cellcolor{blue!25} 4.768e-06 (0.0)  & 0.323 (0.060) \\
+    64 &  \cellcolor{blue!25} 5.531e-06 (1.526e-06)  & 0.644 (0.693) \\
+    128 & \cellcolor{blue!25} 8.583e-06 (0.0)  & 0.328 (0.576) \\
+    256 &  \cellcolor{blue!25} 1.621e-05 (0.0)  & 0.687 (0.713) \\
+\end{tcolorbox}
+
+
+\begin{problem}
+	Vẽ các đồ thị hội tụ (convergence graph)
+\end{problem}
+
+\foreach \i in {1,...,10}{
+     \begin{figure}[H]
+         \centering
+         \includegraphics[width=\textwidth]{Figs/\i}
+     \end{figure}
+
+}
+
+
+
+\begin{problem}
+	Nhận xét
+\end{problem}
+\begin{itemize}
+    \item From the experimental results and graphs presented, it is evident that the Differential Evolution (DE) algorithm consistently outperforms the Cross Entropy Method (CEM) in terms of returning solutions with superior objective values, closer to the global optima, across various scenarios.
+
+    \item DE exhibits significantly lower standard deviations compared to CEM in the experiments, as illustrated in the graphs. Additionally, DE demonstrates much faster convergence times.
+
+    \item Across the Sphere, Ackley, and Rosenbrock functions, both DE and CEM produce satisfactory solutions closely approximating the optimal solutions.
+
+    \item However, in the Michalewicz and Griewank functions, only DE consistently provides good solutions in both two and ten dimensions. CEM yields relatively poor results, considerably distant from the optimal solutions.
+\end{itemize}
+
+\begin{problem}
+	Resources 
+\end{problem}
+All experimental results and the GIF file are stored \href{https://drive.google.com/drive/folders/1d0pKi-EmnH304fb96UK9QFQkoIHcN6Ay?usp=drive_link}{here}.
+
+\end{document}
