@@ -1,0 +1,7 @@
+Average Score: -420.4
+Average Score: -420.4
+Standard : 8.986656775464388Mean Score:, 17.97331355092878
+Win count: 0
+Time result: 0.9011514186859131
+Time result: 0.8431203365325928
+Time result: 0.894418478012085
