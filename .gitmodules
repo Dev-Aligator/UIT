@@ -1,0 +1,15 @@
+[submodule "CS115.N12.KHCL/FinalSeminar"]
+	path = CS115.N12.KHCL/FinalSeminar
+	url = https://github.com/Dev-Aligator/Recurrent-Neural-Networks-RNNs-
+[submodule "CS523.N21.KHCL/Seminar"]
+	path = CS523.N21.KHCL/Seminar
+	url = https://github.com/Dev-Aligator/Red-Black-Tree
+[submodule "IE221.N23.CNCL/FinalProject"]
+	path = IE221.N23.CNCL/FinalProject
+	url = https://github.com/Dev-Aligator/SwiftSend-Web
+[submodule "IE303.N21.CNCL/FinalProject"]
+	path = IE303.N21.CNCL/FinalProject
+	url = https://github.com/Dev-Aligator/Spring-Movie-Review
+[submodule "CS221.O12.KHCL/slides"]
+	path = CS221.O12.KHCL/slides
+	url = https://github.com/Dev-Aligator/CS221-Slides
