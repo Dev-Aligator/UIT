@@ -5,7 +5,7 @@
 # *.ipynb text
 
 # To ignore it use below
-*.ipynb linguist-documentation
+#*.ipynb linguist-documentation
 
 UIT/CS105.O22.KHCL/** linguist-vendored
 UIT/CS115.N12.KHCL/** linguist-vendored
