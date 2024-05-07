@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js</title>
+    <style>
+        .button {  background-color: Crimson;  border: none;  color: white;  padding: 15px 32px;  text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px;  margin: 4px 2px;  cursor: pointer;}
+        .button2 {background-color: LightSalmon;}
+        .button3 {background-color: SeaGreen;} 
+        .button4 {background-color: MidnightBlue;}
+    </style>
+</head>
+<body>
+    <div id="webgl"></div>
+
+    <button id="rotateLeftButton" class="button">Rotate Left</button>
+    <button id="rotateRightButton" class="button">Rotate Right</button>
+    <button id="rotateUpButton" class="button">Rotate Up</button>
+    <button id="rotateDownButton" class="button">Rotate Down</button>
+
+    <button id="scaleIncreaseButton" class="button button2">Scale Increase</button>
+    <button id="scaleDecreaseButton" class="button button2">Scale Decrease</button>
+
+    <button id="translateLeftButton" class="button button3">Translate Left</button>
+    <button id="translateRightButton" class="button button3">Translate Right</button>
+    <button id="translateUpButton" class="button button3">Translate Up</button>
+    <button id="translateDownButton" class="button button3">Translate Down</button>
+
+    <input type="number" id="cameraX" placeholder="X position">
+    <input type="number" id="cameraY" placeholder="Y position">
+    <input type="number" id="cameraZ" placeholder="Z position">
+    <input type="number" id="lookAtX" placeholder="LookAt X">
+    <input type="number" id="lookAtY" placeholder="LookAt Y">
+    <input type="number" id="lookAtZ" placeholder="LookAt Z">
+
+    <button id="changeCameraButton" class="button button4">Change Camera</button>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
