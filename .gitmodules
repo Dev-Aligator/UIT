@@ -19,3 +19,6 @@
 [submodule "CS106.O21/Final-Project"]
 	path = CS106.O21/Final-Project
 	url = https://github.com/Dev-Aligator/thief-orienteering-problem
+[submodule "CS313.O21.KHCL/FinalProject"]
+	path = CS313.O21.KHCL/FinalProject
+	url = https://github.com/Dev-Aligator/animercs
