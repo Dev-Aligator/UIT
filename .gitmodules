@@ -13,3 +13,6 @@
 [submodule "CS221.O12.KHCL/slides"]
 	path = CS221.O12.KHCL/slides
 	url = https://github.com/Dev-Aligator/CS221-Slides
+[submodule "CS105.O22.KHCL/FinalProject"]
+	path = CS105.O22.KHCL/FinalProject
+	url = https://github.com/Dev-Aligator/Crossy-ComGraphics
